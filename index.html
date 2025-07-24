@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>APEPDCL Meter Readings - July 2025</title>
+    <style>
+        :root {
+            --primary: #0056b3;
+            --secondary: #495057;
+            --accent: #e9ecef;
+            --border: #dee2e6;
+            --text: #212529;
+            --card-bg: #ffffff;
+            --input-bg: #f8f9fa;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.5;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .header h1 {
+            color: var(--primary);
+            margin: 0;
+            font-size: 28px;
+        }
+        
+        .header h2 {
+            color: var(--secondary);
+            margin: 5px 0 0;
+            font-size: 20px;
+            font-weight: 500;
+        }
+        
+        .timestamp {
+            text-align: right;
+            color: var(--secondary);
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+        
+        .main-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .energy-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .columns-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .column {
+            flex: 1;
+        }
+        
+        .reading-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+        
+        .reading-input {
+            width: 100px;
+            padding: 8px 10px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background-color: var(--input-bg);
+            font-size: 15px;
+            order: 1;
+        }
+        
+        .reading-label {
+            font-weight: 600;
+            color: var(--secondary);
+            order: 2;
+            flex-grow: 1;
+        }
+        
+        .reading-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(0, 86, 179, 0.2);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: var(--secondary);
+            font-size: 14px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+        
+        .submit-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto 0;
+            transition: background-color 0.2s;
+        }
+        
+        .submit-btn:hover {
+            background-color: #004494;
+        }
+        
+        @media (max-width: 768px) {
+            .energy-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .columns-container {
+                flex-direction: column;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .reading-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .reading-input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>APEPDCL METER READINGS</h1>
+            <h2>JULY 2025</h2>
+        </div>
+        
+        <div class="timestamp">
+            <p>Date: 23-07-2025 | Time: 18:30</p>
+        </div>
+        
+        <form id="meterReadingsForm">
+            <div class="main-card">
+                <div class="card-header">ENERGY CONSUMPTION</div>
+                <div class="card-body">
+                    <div class="energy-grid">
+                        <div class="reading-row">
+                            <input type="number" class="reading-input" value="10185">
+                            <span class="reading-label">Active Energy (kWh)</span>
+                        </div>
+                        <div class="reading-row">
+                            <input type="number" class="reading-input" value="10749">
+                            <span class="reading-label">Apparent Energy (kVAh)</span>
+                        </div>
+                        <div class="reading-row">
+                            <input type="number" class="reading-input" value="56">
+                            <span class="reading-label">FTD (Units)</span>
+                        </div>
+                        <div class="reading-row">
+                            <input type="number" class="reading-input" value="10088">
+                            <span class="reading-label">MTD (Units)</span>
+                        </div>
+                        <div class="reading-row">
+                            <input type="number" class="reading-input" value="123852">
+                            <span class="reading-label">YTD (Units)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="columns-container">
+                <div class="column">
+                    <div class="main-card">
+                        <div class="card-header">POWER OUTAGE INFORMATION</div>
+                        <div class="card-body">
+                            <div class="reading-row">
+                                <input type="number" class="reading-input" value="0">
+                                <span class="reading-label">FTD (Hours)</span>
+                            </div>
+                            <div class="reading-row">
+                                <input type="number" class="reading-input" placeholder="Enter value">
+                                <span class="reading-label">MTD (Hours)</span>
+                            </div>
+                            <div class="reading-row">
+                                <input type="number" class="reading-input" placeholder="Enter value">
+                                <span class="reading-label">YTD (Hours)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="column">
+                    <div class="main-card">
+                        <div class="card-header">DG HMR READINGS</div>
+                        <div class="card-body">
+                            <div class="reading-row">
+                                <input type="number" class="reading-input" placeholder="Enter value">
+                                <span class="reading-label">FTD</span>
+                            </div>
+                            <div class="reading-row">
+                                <input type="number" class="reading-input" placeholder="Enter value">
+                                <span class="reading-label">MTD</span>
+                            </div>
+                            <div class="reading-row">
+                                <input type="number" class="reading-input" placeholder="Enter value">
+                                <span class="reading-label">YTD</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="submit-btn">Submit Readings</button>
+        </form>
+        
+        <div class="footer">
+            <p>Andhra Pradesh Eastern Power Distribution Company Limited (APEPDCL)</p>
+            <p>Meter reading report generated on 23-07-2025 at 18:30</p>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('meterReadingsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Meter readings submitted successfully!');
+            // Here you would typically send the data to a server
+        });
+    </script>
+</body>
+</html>
