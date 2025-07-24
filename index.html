@@ -135,6 +135,30 @@
             cursor: pointer;
         }
         
+        .formula-box {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: var(--accent);
+            border-radius: 4px;
+        }
+        
+        .formula-expression {
+            flex: 1;
+            font-family: monospace;
+        }
+        
+        .formula-result {
+            width: 100px;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background-color: var(--card-bg);
+            text-align: right;
+            margin-left: 10px;
+        }
+        
         @media (max-width: 600px) {
             .dual-columns,
             .form-row {
@@ -149,6 +173,17 @@
             
             .reading-input {
                 width: 100%;
+                margin-top: 5px;
+            }
+            
+            .formula-box {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .formula-result {
+                width: 100%;
+                margin-left: 0;
                 margin-top: 5px;
             }
         }
@@ -184,15 +219,15 @@
                         <div>
                             <div class="reading-row">
                                 <span class="reading-label">Starting </span>
-                                <input type="number" class="reading-input" id="kvaStart" value="00" required>
+                                <input type="number" class="reading-input" id="kvaStart" value=" " required>
                             </div>
                             <div class="reading-row">
-                                <span class="reading-label">Closeing</span>
-                                <input type="number" class="reading-input" id="kvaClose" value="00" required>
+                                <span class="reading-label">Closing</span>
+                                <input type="number" class="reading-input" id="kvaClose" value=" " required>
                             </div>
-                            <div class="reading-row">
-                                <span class="reading-label">FTD (kVAh)</span>
-                                <input type="number" class="reading-input" id="ftdKvah" value="00" readonly>
+                            <div class="formula-box">
+                                <div class="formula-expression">FTD kVAh = (Closing - Starting) × 4</div>
+                                <div class="formula-result" id="ftdKvah">0.00</div>
                             </div>
                         </div>
                         <div>
@@ -213,7 +248,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="reading-row">
-                        <span class="reading-label">FTD (kWh)</span>
+                        <span class="reading-label">FTD kWh Consumption</span>
                         <input type="number" class="reading-input" id="ftdKwh" required>
                     </div>
                 </div>
@@ -251,6 +286,8 @@
                     </div>
                 </div>
             </div>
+            
+            <button type="submit" class="submit-btn">SUBMIT READINGS</button>
         </form>
     </div>
 
@@ -262,7 +299,9 @@
         function calculateFTD() {
             const start = parseFloat(document.getElementById('kvaStart').value) || 0;
             const close = parseFloat(document.getElementById('kvaClose').value) || 0;
-            document.getElementById('ftdKvah').value = (close - start).toFixed(2);
+            const multiplier = 4;
+            const result = (close - start) * multiplier;
+            document.getElementById('ftdKvah').textContent = result.toFixed(2);
         }
         
         // Set up event listeners
@@ -281,7 +320,7 @@
                 shift: document.getElementById('shift').value,
                 kvaStart: document.getElementById('kvaStart').value,
                 kvaClose: document.getElementById('kvaClose').value,
-                ftdKvah: document.getElementById('ftdKvah').value,
+                ftdKvah: document.getElementById('ftdKvah').textContent,
                 mtdKvah: document.getElementById('mtdKvah').value,
                 ytdKvah: document.getElementById('ytdKvah').value,
                 ftdKwh: document.getElementById('ftdKwh').value,
