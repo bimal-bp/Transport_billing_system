@@ -171,7 +171,7 @@
                     <select id="shift" required>
                         <option value="">Select Shift</option>
                         <option value="Day">Day Shift</option>
-                        <option value="FTD" selected>FTD </option>
+                        <option value="FTD Report " selected>FTD Report </option>
                     </select>
                 </div>
             </div>
@@ -183,25 +183,25 @@
                     <div class="dual-columns">
                         <div>
                             <div class="reading-row">
-                                <span class="reading-label">Start Reading</span>
-                                <input type="number" class="reading-input" id="kvaStart" value="10200" required>
+                                <span class="reading-label">Starting </span>
+                                <input type="number" class="reading-input" id="kvaStart" value="00" required>
                             </div>
                             <div class="reading-row">
-                                <span class="reading-label">Close Reading</span>
-                                <input type="number" class="reading-input" id="kvaClose" value="10760" required>
+                                <span class="reading-label">Closeing</span>
+                                <input type="number" class="reading-input" id="kvaClose" value="00" required>
                             </div>
                             <div class="reading-row">
                                 <span class="reading-label">FTD (kVAh)</span>
-                                <input type="number" class="reading-input" id="ftdKvah" value="560" readonly>
+                                <input type="number" class="reading-input" id="ftdKvah" value="00" readonly>
                             </div>
                         </div>
                         <div>
                             <div class="reading-row">
-                                <span class="reading-label">MTD (kVAh)</span>
+                                <span class="reading-label">MTD</span>
                                 <input type="number" class="reading-input" id="mtdKvah" required>
                             </div>
                             <div class="reading-row">
-                                <span class="reading-label">YTD (kVAh)</span>
+                                <span class="reading-label">YTD</span>
                                 <input type="number" class="reading-input" id="ytdKvah" required>
                             </div>
                         </div>
@@ -251,8 +251,6 @@
                     </div>
                 </div>
             </div>
-            
-            <button type="submit" class="submit-btn">SUBMIT READINGS</button>
         </form>
     </div>
 
