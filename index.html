@@ -122,7 +122,7 @@
             gap: 15px;
         }
         
-        .submit-btn {
+        .print-btn {
             background: var(--primary);
             color: white;
             border: none;
@@ -186,11 +186,26 @@
                 margin-top: 5px;
             }
         }
+
+        @media print {
+            .print-btn {
+                display: none;
+            }
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
+            <h1>Meter Reading Report</h1>
         </div>
         
         <form id="meterForm">
@@ -204,7 +219,7 @@
                     <select id="shift" required>
                         <option value="">Select Shift</option>
                         <option value="Day">Day Shift</option>
-                        <option value="FTD Report " selected>FTD Report </option>
+                        <option value="FTD Report" selected>FTD Report</option>
                     </select>
                 </div>
             </div>
@@ -217,14 +232,14 @@
                         <div>
                             <div class="reading-row">
                                 <span class="reading-label">Starting </span>
-                                <input type="number" class="reading-input" id="kvaStart" value=" " required>
+                                <input type="number" class="reading-input" id="kvaStart" value="" required>
                             </div>
                             <div class="reading-row">
                                 <span class="reading-label">Closing</span>
-                                <input type="number" class="reading-input" id="kvaClose" value=" " required>
+                                <input type="number" class="reading-input" id="kvaClose" value="" required>
                             </div>
                             <div class="formula-box">
-                                <div class="formula-expression">FTD kVAh = (Closing - Starting) × 4</div>
+                                <div class="formula-expression">FTD kVAh</div>
                                 <div class="formula-result" id="ftdKvah">0.00</div>
                             </div>
                         </div>
@@ -291,6 +306,8 @@
                     </div>
                 </div>
             </div>
+            
+            <button type="button" class="print-btn" onclick="window.print()">Print Report</button>
         </form>
     </div>
 
@@ -313,29 +330,6 @@
         
         // Initial calculation
         calculateFTD();
-        
-        // Form submission
-        document.getElementById('meterForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const data = {
-                date: document.getElementById('readingDate').value,
-                shift: document.getElementById('shift').value,
-                kvaStart: document.getElementById('kvaStart').value,
-                kvaClose: document.getElementById('kvaClose').value,
-                ftdKvah: document.getElementById('ftdKvah').textContent,
-                mtdKvah: document.getElementById('mtdKvah').value,
-                ytdKvah: document.getElementById('ytdKvah').value,
-                ftdKwh: document.getElementById('ftdKwh').value,
-                ftdOutage: document.getElementById('ftdOutage').value,
-                mtdOutage: document.getElementById('mtdOutage').value,
-                ftdHmr: document.getElementById('ftdHmr').value,
-                mtdHmr: document.getElementById('mtdHmr').value
-            };
-            
-            console.log('Submitting:', data);
-            alert('Readings submitted successfully!');
-        });
     </script>
 </body>
 </html>
