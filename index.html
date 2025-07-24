@@ -48,10 +48,35 @@
             font-size: 16px;
         }
         
-        .timestamp {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 14px;
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-col {
+            flex: 1;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--secondary);
+        }
+        
+        input[type="date"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background-color: var(--input-bg);
         }
         
         .card {
@@ -107,11 +132,14 @@
             width: 100%;
             margin-top: 20px;
             font-weight: bold;
+            cursor: pointer;
         }
         
         @media (max-width: 600px) {
-            .dual-columns {
+            .dual-columns,
+            .form-row {
                 grid-template-columns: 1fr;
+                flex-direction: column;
             }
             
             .reading-row {
@@ -130,28 +158,54 @@
     <div class="container">
         <div class="header">
             <h1>APEPDCL METER READINGS</h1>
-        </div>
-        
-        <div class="timestamp">
-            Date: 23-07-2025 | Shift: Night
+            <h2>JULY 2025</h2>
         </div>
         
         <form id="meterForm">
+            <div class="form-row">
+                <div class="form-col">
+                    <label for="readingDate">Date</label>
+                    <input type="date" id="readingDate" required>
+                </div>
+                <div class="form-col">
+                    <label for="shift">Shift</label>
+                    <select id="shift" required>
+                        <option value="">Select Shift</option>
+                        <option value="Day">Day Shift</option>
+                        <option value="Night" selected>Night Shift</option>
+                    </select>
+                </div>
+            </div>
+            
             <!-- kVAh Readings -->
             <div class="card">
                 <div class="card-header">kVAh METER READINGS</div>
                 <div class="card-body">
-                    <div class="reading-row">
-                        <span class="reading-label">Start Reading</span>
-                        <input type="number" class="reading-input" id="kvaStart" value="10200" required>
-                    </div>
-                    <div class="reading-row">
-                        <span class="reading-label">Close Reading</span>
-                        <input type="number" class="reading-input" id="kvaClose" value="10760" required>
-                    </div>
-                    <div class="reading-row">
-                        <span class="reading-label">FTD (kVAh)</span>
-                        <input type="number" class="reading-input" id="ftdKvah" value="560" readonly>
+                    <div class="dual-columns">
+                        <div>
+                            <div class="reading-row">
+                                <span class="reading-label">Start Reading</span>
+                                <input type="number" class="reading-input" id="kvaStart" value="10200" required>
+                            </div>
+                            <div class="reading-row">
+                                <span class="reading-label">Close Reading</span>
+                                <input type="number" class="reading-input" id="kvaClose" value="10760" required>
+                            </div>
+                            <div class="reading-row">
+                                <span class="reading-label">FTD (kVAh)</span>
+                                <input type="number" class="reading-input" id="ftdKvah" value="560" readonly>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="reading-row">
+                                <span class="reading-label">MTD (kVAh)</span>
+                                <input type="number" class="reading-input" id="mtdKvah" required>
+                            </div>
+                            <div class="reading-row">
+                                <span class="reading-label">YTD (kVAh)</span>
+                                <input type="number" class="reading-input" id="ytdKvah" required>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -204,11 +258,14 @@
     </div>
 
     <script>
+        // Set default date to today
+        document.getElementById('readingDate').valueAsDate = new Date();
+        
         // Calculate FTD kVAh automatically
         function calculateFTD() {
             const start = parseFloat(document.getElementById('kvaStart').value) || 0;
             const close = parseFloat(document.getElementById('kvaClose').value) || 0;
-            document.getElementById('ftdKvah').value = ((close - start) * 4).toFixed(2);
+            document.getElementById('ftdKvah').value = (close - start).toFixed(2);
         }
         
         // Set up event listeners
@@ -223,16 +280,18 @@
             e.preventDefault();
             
             const data = {
+                date: document.getElementById('readingDate').value,
+                shift: document.getElementById('shift').value,
                 kvaStart: document.getElementById('kvaStart').value,
                 kvaClose: document.getElementById('kvaClose').value,
                 ftdKvah: document.getElementById('ftdKvah').value,
+                mtdKvah: document.getElementById('mtdKvah').value,
+                ytdKvah: document.getElementById('ytdKvah').value,
                 ftdKwh: document.getElementById('ftdKwh').value,
                 ftdOutage: document.getElementById('ftdOutage').value,
                 mtdOutage: document.getElementById('mtdOutage').value,
                 ftdHmr: document.getElementById('ftdHmr').value,
-                mtdHmr: document.getElementById('mtdHmr').value,
-                date: '23-07-2025',
-                shift: 'Night'
+                mtdHmr: document.getElementById('mtdHmr').value
             };
             
             console.log('Submitting:', data);
