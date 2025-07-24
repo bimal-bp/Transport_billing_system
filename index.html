@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>APEPDCL Meter Readings</title>
     <style>
         :root {
             --primary: #0056b3;
@@ -192,7 +191,6 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>APEPDCL METER READINGS</h1>
         </div>
         
         <form id="meterForm">
@@ -247,9 +245,16 @@
             <!-- kWh Reading -->
             <div class="card">
                 <div class="card-body">
-                    <div class="reading-row">
-                        <span class="reading-label">FTD kWh Consumption</span>
-                        <input type="number" class="reading-input" id="kvaClose" value=" " required>
+                    <div class="dual-columns">
+                        <div>
+                            <div class="reading-row">
+                                <span class="reading-label">FTD kWh Consumption</span>
+                                <input type="number" class="reading-input" id="ftdKwh" required>
+                            </div>
+                        </div>
+                        <div>
+                            <!-- Empty column for future use -->
+                        </div>
                     </div>
                 </div>
             </div>
