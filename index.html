@@ -31,8 +31,15 @@
         }
         
         .header {
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
+        }
+        
+        .header-text {
+            text-align: center;
+            flex-grow: 1;
         }
         
         .header h1 {
@@ -134,12 +141,11 @@
             background: var(--primary);
             color: white;
             border: none;
-            padding: 10px;
+            padding: 8px 12px;
             border-radius: 4px;
-            width: 100%;
-            margin-top: 20px;
             font-weight: bold;
             cursor: pointer;
+            height: fit-content;
         }
         
         .formula-box {
@@ -180,6 +186,15 @@
             .form-col {
                 align-items: center;
             }
+            
+            .header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .print-btn {
+                width: 100%;
+            }
         }
 
         @media print {
@@ -200,7 +215,11 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>FTD REPORT</h1>
+            <button type="button" class="print-btn" onclick="window.print()">Print Report</button>
+            <div class="header-text">
+                <h1>FTD REPORT</h1>
+            </div>
+            <div style="width: 100px;">&nbsp;</div> <!-- Spacer for alignment -->
         </div>
         
         <form id="meterForm">
@@ -301,8 +320,6 @@
                     </div>
                 </div>
             </div>
-            
-            <button type="button" class="print-btn" onclick="window.print()">Print Report</button>
         </form>
     </div>
 
