@@ -22,7 +22,7 @@
         }
         
         .container {
-            max-width: 600px;
+            max-width: 500px;
             margin: 0 auto;
             background: white;
             border-radius: 8px;
@@ -59,6 +59,9 @@
         
         .form-col {
             flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         
         label {
@@ -66,16 +69,18 @@
             margin-bottom: 5px;
             font-weight: bold;
             color: var(--secondary);
+            text-align: center;
         }
         
         input[type="date"],
         input[type="number"],
         select {
-            width: 100%;
+            width: 120px;
             padding: 8px;
             border: 1px solid var(--border);
             border-radius: 4px;
             background-color: var(--input-bg);
+            text-align: center;
         }
         
         .card {
@@ -90,6 +95,7 @@
             color: white;
             padding: 10px 15px;
             font-weight: bold;
+            text-align: center;
         }
         
         .card-body {
@@ -98,22 +104,24 @@
         
         .reading-row {
             display: flex;
+            flex-direction: column;
             align-items: center;
             margin-bottom: 12px;
         }
         
         .reading-label {
-            flex: 1;
             font-weight: bold;
             color: var(--secondary);
+            margin-bottom: 5px;
+            text-align: center;
         }
         
         .reading-input {
-            width: 120px;
+            width: 100px;
             padding: 8px;
             border: 1px solid var(--border);
             border-radius: 4px;
-            text-align: right;
+            text-align: center;
         }
         
         .dual-columns {
@@ -136,6 +144,7 @@
         
         .formula-box {
             display: flex;
+            flex-direction: column;
             align-items: center;
             margin-bottom: 10px;
             padding: 10px;
@@ -144,8 +153,9 @@
         }
         
         .formula-expression {
-            flex: 1;
             font-family: monospace;
+            font-weight: bold;
+            margin-bottom: 5px;
         }
         
         .formula-result {
@@ -154,36 +164,21 @@
             border: 1px solid var(--border);
             border-radius: 4px;
             background-color: var(--card-bg);
-            text-align: right;
-            margin-left: 10px;
+            text-align: center;
+            font-weight: bold;
         }
         
         @media (max-width: 600px) {
-            .dual-columns,
-            .form-row {
+            .dual-columns {
                 grid-template-columns: 1fr;
+            }
+            
+            .form-row {
                 flex-direction: column;
             }
             
-            .reading-row {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .reading-input {
-                width: 100%;
-                margin-top: 5px;
-            }
-            
-            .formula-box {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .formula-result {
-                width: 100%;
-                margin-left: 0;
-                margin-top: 5px;
+            .form-col {
+                align-items: center;
             }
         }
 
@@ -205,6 +200,7 @@
 <body>
     <div class="container">
         <div class="header">
+            <h1>FTD REPORT</h1>
         </div>
         
         <form id="meterForm">
@@ -230,7 +226,7 @@
                     <div class="dual-columns">
                         <div>
                             <div class="reading-row">
-                                <span class="reading-label">Starting </span>
+                                <span class="reading-label">Starting</span>
                                 <input type="number" class="reading-input" id="kvaStart" value="" required>
                             </div>
                             <div class="reading-row">
@@ -238,8 +234,8 @@
                                 <input type="number" class="reading-input" id="kvaClose" value="" required>
                             </div>
                             <div class="formula-box">
-                                    <div class="formula-expression">FTD kVAh</div>
-                                    <div class="formula-result" id="ftdKvah" style="font-weight: bold;"> </div>
+                                <div class="formula-expression">FTD kVAh</div>
+                                <div class="formula-result" id="ftdKvah">0</div>
                             </div>
                         </div>
                         <div>
@@ -319,8 +315,8 @@
             const start = parseFloat(document.getElementById('kvaStart').value) || 0;
             const close = parseFloat(document.getElementById('kvaClose').value) || 0;
             const multiplier = 4;
-            const result = (close - start) * multiplier;
-            document.getElementById('ftdKvah').textContent = result.toFixed(2);
+            const result = Math.round((close - start) * multiplier);
+            document.getElementById('ftdKvah').textContent = result;
         }
         
         // Set up event listeners
