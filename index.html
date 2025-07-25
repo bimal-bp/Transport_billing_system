@@ -111,16 +111,17 @@
         
         .reading-row {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
+            gap: 10px;
             margin-bottom: 12px;
         }
         
         .reading-label {
             font-weight: bold;
             color: var(--secondary);
-            margin-bottom: 5px;
             text-align: center;
+            min-width: 70px;
         }
         
         .reading-input {
@@ -242,31 +243,21 @@
             <div class="card">
                 <div class="card-header">METER READINGS</div>
                 <div class="card-body">
-                    <div class="dual-columns">
-                        <div>
-                            <div class="reading-row">
-                                <span class="reading-label">Starting</span>
-                                <input type="number" class="reading-input" id="kvaStart" value="" required>
-                            </div>
-                            <div class="reading-row">
-                                <span class="reading-label">Closing</span>
-                                <input type="number" class="reading-input" id="kvaClose" value="" required>
-                            </div>
-                            <div class="formula-box">
-                                <div class="formula-expression">FTD kVAh</div>
-                                <div class="formula-result" id="ftdKvah">0</div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="reading-row">
-                                <span class="reading-label">MTD</span>
-                                <input type="number" class="reading-input" id="mtdKvah" required>
-                            </div>
-                            <div class="reading-row">
-                                <span class="reading-label">YTD</span>
-                                <input type="number" class="reading-input" id="ytdKvah" required>
-                            </div>
-                        </div>
+                    <div class="reading-row">
+                        <span class="reading-label">Starting</span>
+                        <input type="number" class="reading-input" id="kvaStart" value="" required>
+                        <span class="reading-label">Closing</span>
+                        <input type="number" class="reading-input" id="kvaClose" value="" required>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-expression">FTD kVAh</div>
+                        <div class="formula-result" id="ftdKvah">0</div>
+                    </div>
+                    <div class="reading-row">
+                        <span class="reading-label">MTD</span>
+                        <input type="number" class="reading-input" id="mtdKvah" required>
+                        <span class="reading-label">YTD</span>
+                        <input type="number" class="reading-input" id="ytdKvah" required>
                     </div>
                 </div>
             </div>
@@ -274,16 +265,9 @@
             <!-- kWh Reading -->
             <div class="card">
                 <div class="card-body">
-                    <div class="dual-columns">
-                        <div>
-                            <div class="reading-row">
-                                <span class="reading-label">FTD kWh Reading</span>
-                                <input type="number" class="reading-input" id="ftdKwh" required>
-                            </div>
-                        </div>
-                        <div>
-                            <!-- Empty column for future use -->
-                        </div>
+                    <div class="reading-row">
+                        <span class="reading-label">FTD kWh</span>
+                        <input type="number" class="reading-input" id="ftdKwh" required>
                     </div>
                 </div>
             </div>
