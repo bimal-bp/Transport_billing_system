@@ -3,328 +3,543 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGX Minerals Transport Billing</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        :root {
-            --primary: #0056b3;
-            --secondary: #495057;
-            --accent: #e9ecef;
-            --border: #dee2e6;
-            --text: #212529;
-            --card-bg: #ffffff;
-            --input-bg: #f8f9fa;
-        }
-        
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 15px;
+            background-color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 20px;
-        }
-        
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-        
-        .header-text {
-            text-align: center;
-            flex-grow: 1;
+        .bill-container {
+            display: none;
+            margin-top: 30px;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-        
-        .header h1 {
-            color: var(--primary);
-            margin: 0;
-            font-size: 22px;
+        .table {
+            font-size: 14px;
         }
-        
-        .header h2 {
-            color: var(--secondary);
-            margin: 5px 0 0;
-            font-size: 16px;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .form-row {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        
-        .form-col {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: var(--secondary);
-            text-align: center;
-        }
-        
-        input[type="date"],
-        input[type="number"],
-        select {
-            width: 120px;
-            padding: 8px;
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            background-color: var(--input-bg);
-            text-align: center;
-        }
-        
-        .card {
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            margin-bottom: 15px;
-            overflow: hidden;
-        }
-        
-        .card-header {
-            background: var(--primary);
+        .table thead th {
+            background-color: #343a40;
             color: white;
-            padding: 10px 15px;
-            font-weight: bold;
-            text-align: center;
         }
-        
-        .card-body {
-            padding: 15px;
+        .form-control:read-only {
+            background-color: #f8f9fa;
         }
-        
-        .reading-row {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-        
-        .reading-label {
-            font-weight: bold;
-            color: var(--secondary);
-            text-align: center;
-            min-width: 70px;
-        }
-        
-        .reading-input {
-            width: 100px;
-            padding: 8px;
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            text-align: center;
-        }
-        
-        .dual-columns {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        
-        .print-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-            height: fit-content;
-        }
-        
-        .formula-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 10px;
-            padding: 10px;
-            background-color: var(--accent);
-            border-radius: 4px;
-        }
-        
-        .formula-expression {
-            font-family: monospace;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        
-        .formula-result {
-            width: 100px;
-            padding: 8px;
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            background-color: var(--card-bg);
-            text-align: center;
+        #netWeight, #totalPrice {
             font-weight: bold;
         }
-        
-        @media (max-width: 600px) {
-            .dual-columns {
-                grid-template-columns: 1fr;
-            }
-            
-            .form-row {
-                flex-direction: column;
-            }
-            
-            .form-col {
-                align-items: center;
-            }
-            
-            .header {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .print-btn {
-                width: 100%;
-            }
-        }
-
         @media print {
-            .print-btn {
-                display: none;
+            .no-print {
+                display: none !important;
             }
             body {
                 background-color: white;
+            }
+            .bill-container {
+                display: block !important;
+                box-shadow: none;
                 padding: 0;
             }
-            .container {
-                box-shadow: none;
-                max-width: 100%;
+            .table {
+                font-size: 12px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <button type="button" class="print-btn" onclick="window.print()">Print Report</button>
-            <div class="header-text">
-            </div>
-            <div style="width: 100px;">&nbsp;</div> <!-- Spacer for alignment -->
+        <div class="header text-center">
+            <h1>Transport Billing System</h1>
+            <p class="lead">SGX Minerals Pvt Ltd</p>
         </div>
-        
-        <form id="meterForm">
-            <div class="form-row">
-                <div class="form-col">
-                    <label for="readingDate">Date</label>
-                    <input type="date" id="readingDate" required>
-                </div>
-                <div class="form-col">
-                    <label for="shift">Shift</label>
-                    <select id="shift" required>
-                        <option value="">Select Shift</option>
-                        <option value="Day">Day Shift</option>
-                        <option value="FTD Report" selected>FTD Report</option>
-                    </select>
-                </div>
-            </div>
-            
-            <!-- kVAh Readings -->
-            <div class="card">
-                <div class="card-header">kVAh METER READINGS</div>
-                <div class="card-body">
-                    <div class="reading-row">
-                        <span class="reading-label">Starting</span>
-                        <input type="number" class="reading-input" id="kvaStart" value="" required>
-                        <span class="reading-label">Closing</span>
-                        <input type="number" class="reading-input" id="kvaClose" value="" required>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Add New Transaction</h3>
+                <form id="transactionForm">
+                    <div class="mb-3">
+                        <label for="client" class="form-label">Client</label>
+                        <select class="form-select" id="client" required>
+                            <option value="">Select Client</option>
+                            <option value="L&T">L&T</option>
+                            <option value="Madhuwada">Madhuwada</option>
+                            <option value="Airport">Airport</option>
+                        </select>
                     </div>
-                    <div class="formula-box">
-                        <div class="formula-expression">FTD kVAh</div>
-                        <div class="formula-result" id="ftdKvah">0</div>
+                    <div class="mb-3">
+                        <label for="product" class="form-label">Product</label>
+                        <select class="form-select" id="product" required>
+                            <option value="">Select Product</option>
+                            <option value="10mm">10mm</option>
+                            <option value="20mm">20mm</option>
+                            <option value="40mm">40mm</option>
+                            <option value="Rivo sand">Rivo sand</option>
+                        </select>
                     </div>
-                    <div class="reading-row">
-                        <span class="reading-label">MTD</span>
-                        <input type="number" class="reading-input" id="mtdKvah" required>
-                        <span class="reading-label">YTD</span>
-                        <input type="number" class="reading-input" id="ytdKvah" required>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- kWh Reading -->
-            <div class="card">
-                <div class="card-body">
-                    <div class="reading-row">
-                        <span class="reading-label">FTD kWh</span>
-                        <input type="number" class="reading-input" id="ftdKwh" required>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Power Outage and DG in two columns -->
-            <div class="dual-columns">
-                <!-- Power Outage -->
-                <div class="card">
-                    <div class="card-header">POWER OUTAGE (HRs)</div>
-                    <div class="card-body">
-                        <div class="reading-row">
-                            <span class="reading-label">FTD </span>
-                            <input type="number" step="0.1" class="reading-input" id="ftdOutage" required>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="grossWeight" class="form-label">Gross Weight (tons)</label>
+                            <input type="number" step="0.01" class="form-control" id="grossWeight" required>
                         </div>
-                        <div class="reading-row">
-                            <span class="reading-label">MTD </span>
-                            <input type="number" step="0.1" class="reading-input" id="mtdOutage" required>
+                        <div class="col-md-4 mb-3">
+                            <label for="tareWeight" class="form-label">Tare Weight (tons)</label>
+                            <input type="number" step="0.01" class="form-control" id="tareWeight" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="netWeight" class="form-label">Net Weight (tons)</label>
+                            <input type="number" step="0.01" class="form-control" id="netWeight" readonly>
                         </div>
                     </div>
-                </div>
-                
-                <!-- DG Readings -->
-                <div class="card">
-                    <div class="card-header">DG READINGS (HMR)</div>
-                    <div class="card-body">
-                        <div class="reading-row">
-                            <span class="reading-label">FTD </span>
-                            <input type="number" step="0.1" class="reading-input" id="ftdHmr" required>
-                        </div>
-                        <div class="reading-row">
-                            <span class="reading-label">MTD </span>
-                            <input type="number" step="0.1" class="reading-input" id="mtdHmr" required>
-                        </div>
+                    <div class="mb-3">
+                        <label for="transporter" class="form-label">Transporter Name</label>
+                        <input type="text" class="form-control" id="transporter" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="truckNumber" class="form-label">Truck Number</label>
+                        <input type="text" class="form-control" id="truckNumber" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="date" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price (per ton)</label>
+                        <input type="number" step="0.01" class="form-control" id="price" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="totalPrice" class="form-label">Total Price</label>
+                        <input type="number" step="0.01" class="form-control" id="totalPrice" readonly>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Transaction</button>
+                </form>
+            </div>
+
+            <div class="col-md-6">
+                <h3>Generate Monthly Bill</h3>
+                <form id="billForm">
+                    <div class="mb-3">
+                        <label for="billClient" class="form-label">Select Client</label>
+                        <select class="form-select" id="billClient" required>
+                            <option value="">Select Client</option>
+                            <option value="L&T">L&T</option>
+                            <option value="Madhuwada">Madhuwada</option>
+                            <option value="Airport">Airport</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="month" class="form-label">Select Month</label>
+                        <input type="month" class="form-control" id="month" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Generate Bill</button>
+                    <button type="button" id="saveBillBtn" class="btn btn-info">Save Bill</button>
+                </form>
+
+                <div id="billContainer" class="bill-container">
+                    <div class="text-center mb-4">
+                        <h4>SGX Minerals Pvt Ltd</h4>
+                        <p>Transport Bill</p>
+                    </div>
+                    <div id="billDetails" class="mb-4">
+                        <div id="clientDetails"></div>
+                        <div id="billPeriod"></div>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Date</th>
+                                <th>Product</th>
+                                <th>Gross Wt.</th>
+                                <th>Tare Wt.</th>
+                                <th>Net Wt.</th>
+                                <th>Price/Ton</th>
+                                <th>Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="billTransactions">
+                            <!-- Transactions will be added here -->
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="6" class="text-end">Total Amount:</th>
+                                <th id="totalAmount">0.00</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div class="mt-4">
+                        <p>For SGX Minerals Pvt Ltd</p>
+                        <p class="mt-4">_________________________</p>
+                        <p>Authorized Signatory</p>
+                    </div>
+                    <div class="text-center mt-4 no-print">
+                        <button id="printBill" class="btn btn-primary me-2">Print Bill</button>
+                        <button id="downloadBill" class="btn btn-secondary">Download as PDF</button>
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-12">
+                <h3>All Transactions</h3>
+                <div class="table-responsive">
+                    <table class="table table-striped" id="allTransactions">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Client</th>
+                                <th>Product</th>
+                                <th>Gross Wt.</th>
+                                <th>Tare Wt.</th>
+                                <th>Net Wt.</th>
+                                <th>Transporter</th>
+                                <th>Truck No.</th>
+                                <th>Price/Ton</th>
+                                <th>Amount</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- All transactions will be added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Set default date to today
-        document.getElementById('readingDate').valueAsDate = new Date();
-        
-        // Calculate FTD kVAh automatically
-        function calculateFTD() {
-            const start = parseFloat(document.getElementById('kvaStart').value) || 0;
-            const close = parseFloat(document.getElementById('kvaClose').value) || 0;
-            const multiplier = 4;
-            const result = Math.round((close - start) * multiplier);
-            document.getElementById('ftdKvah').textContent = result;
+        // Database setup using localStorage
+        let transactions = JSON.parse(localStorage.getItem('sgx-transactions')) || [];
+        let bills = JSON.parse(localStorage.getItem('sgx-bills')) || [];
+
+        // DOM elements
+        const transactionForm = document.getElementById('transactionForm');
+        const billForm = document.getElementById('billForm');
+        const allTransactionsTable = document.getElementById('allTransactions').getElementsByTagName('tbody')[0];
+        const billContainer = document.getElementById('billContainer');
+        const billTransactions = document.getElementById('billTransactions');
+        const totalAmountElement = document.getElementById('totalAmount');
+        const printBillBtn = document.getElementById('printBill');
+        const downloadBillBtn = document.getElementById('downloadBill');
+        const saveBillBtn = document.getElementById('saveBillBtn');
+        const clientDetails = document.getElementById('clientDetails');
+        const billPeriod = document.getElementById('billPeriod');
+        const grossWeightInput = document.getElementById('grossWeight');
+        const tareWeightInput = document.getElementById('tareWeight');
+        const netWeightInput = document.getElementById('netWeight');
+        const priceInput = document.getElementById('price');
+        const totalPriceInput = document.getElementById('totalPrice');
+
+        // Calculate net weight and total price automatically
+        grossWeightInput.addEventListener('input', calculateWeights);
+        tareWeightInput.addEventListener('input', calculateWeights);
+        priceInput.addEventListener('input', calculateTotalPrice);
+
+        function calculateWeights() {
+            const grossWeight = parseFloat(grossWeightInput.value) || 0;
+            const tareWeight = parseFloat(tareWeightInput.value) || 0;
+            
+            // Validate that gross weight is greater than tare weight
+            if (tareWeight > 0 && grossWeight <= tareWeight) {
+                alert('Gross weight must be greater than tare weight');
+                tareWeightInput.value = '';
+                netWeightInput.value = '';
+                totalPriceInput.value = '';
+                return;
+            }
+            
+            const netWeight = grossWeight - tareWeight;
+            netWeightInput.value = netWeight.toFixed(2);
+            calculateTotalPrice();
         }
-        
-        // Set up event listeners
-        document.getElementById('kvaStart').addEventListener('input', calculateFTD);
-        document.getElementById('kvaClose').addEventListener('input', calculateFTD);
-        
-        // Initial calculation
-        calculateFTD();
+
+        function calculateTotalPrice() {
+            const netWeight = parseFloat(netWeightInput.value) || 0;
+            const price = parseFloat(priceInput.value) || 0;
+            const totalPrice = netWeight * price;
+            totalPriceInput.value = totalPrice.toFixed(2);
+        }
+
+        // Form submit - Add new transaction
+        transactionForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate weights again
+            const grossWeight = parseFloat(grossWeightInput.value);
+            const tareWeight = parseFloat(tareWeightInput.value);
+            
+            if (grossWeight <= tareWeight) {
+                alert('Gross weight must be greater than tare weight');
+                return;
+            }
+            
+            const transaction = {
+                id: Date.now(),
+                client: document.getElementById('client').value,
+                product: document.getElementById('product').value,
+                grossWeight: grossWeight,
+                tareWeight: tareWeight,
+                netWeight: parseFloat(netWeightInput.value),
+                transporter: document.getElementById('transporter').value,
+                truckNumber: document.getElementById('truckNumber').value,
+                date: document.getElementById('date').value,
+                price: parseFloat(priceInput.value),
+                totalPrice: parseFloat(totalPriceInput.value)
+            };
+            
+            transactions.push(transaction);
+            saveTransactions();
+            renderAllTransactions();
+            transactionForm.reset();
+            
+            alert('Transaction saved successfully!');
+        });
+
+        // Form submit - Generate bill
+        billForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const client = document.getElementById('billClient').value;
+            const month = document.getElementById('month').value;
+            
+            generateBill(client, month);
+        });
+
+        // Save bill button
+        saveBillBtn.addEventListener('click', function() {
+            if (!billContainer.style.display || billContainer.style.display === 'none') {
+                alert('Please generate a bill first');
+                return;
+            }
+            
+            const client = document.getElementById('billClient').value;
+            const month = document.getElementById('month').value;
+            
+            // Get the transactions shown in the bill
+            const billTransactionsData = [];
+            const rows = billTransactions.getElementsByTagName('tr');
+            
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                billTransactionsData.push({
+                    date: cells[0].textContent,
+                    product: cells[1].textContent,
+                    grossWeight: parseFloat(cells[2].textContent),
+                    tareWeight: parseFloat(cells[3].textContent),
+                    netWeight: parseFloat(cells[4].textContent),
+                    price: parseFloat(cells[5].textContent.replace('₹', '')),
+                    amount: parseFloat(cells[6].textContent.replace('₹', ''))
+                });
+            }
+            
+            const bill = {
+                id: Date.now(),
+                client,
+                month,
+                transactions: billTransactionsData,
+                totalAmount: parseFloat(totalAmountElement.textContent),
+                createdAt: new Date().toISOString()
+            };
+            
+            bills.push(bill);
+            localStorage.setItem('sgx-bills', JSON.stringify(bills));
+            alert('Bill saved successfully!');
+        });
+
+        // Print bill button
+        printBillBtn.addEventListener('click', function() {
+            window.print();
+        });
+
+        // Download as PDF button
+        downloadBillBtn.addEventListener('click', function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Add company header
+            doc.setFontSize(16);
+            doc.setTextColor(40);
+            doc.text('SGX Minerals Pvt Ltd', 105, 15, { align: 'center' });
+            doc.setFontSize(14);
+            doc.text('Transport Bill', 105, 22, { align: 'center' });
+            
+            // Add client details
+            doc.setFontSize(12);
+            const clientDetailsText = clientDetails.innerHTML.split('<br>');
+            clientDetailsText.forEach((line, index) => {
+                if (line.trim() !== '') {
+                    doc.text(line.replace(/<[^>]*>/g, ''), 20, 40 + (index * 7));
+                }
+            });
+            
+            // Add bill period
+            const billPeriodText = billPeriod.innerHTML.split('<br>');
+            billPeriodText.forEach((line, index) => {
+                if (line.trim() !== '') {
+                    doc.text(line.replace(/<[^>]*>/g, ''), 20, 60 + (index * 7));
+                }
+            });
+            
+            // Add table headers
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'bold');
+            const headers = ["Date", "Product", "Gross Wt.", "Tare Wt.", "Net Wt.", "Price", "Amount"];
+            let x = 15;
+            const columnWidths = [20, 30, 20, 20, 20, 20, 30];
+            headers.forEach((header, index) => {
+                doc.text(header, x, 80);
+                x += columnWidths[index];
+            });
+            
+            // Add transactions
+            doc.setFont(undefined, 'normal');
+            const rows = billTransactions.getElementsByTagName('tr');
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                x = 15;
+                for (let j = 0; j < cells.length; j++) {
+                    doc.text(cells[j].textContent, x, 90 + (i * 10));
+                    x += columnWidths[j];
+                }
+            }
+            
+            // Add total
+            doc.setFont(undefined, 'bold');
+            doc.text(`Total Amount: ₹${totalAmountElement.textContent}`, 140, 90 + (rows.length * 10));
+            
+            // Add footer
+            doc.setFontSize(10);
+            doc.text('For SGX Minerals Pvt Ltd', 20, 120 + (rows.length * 10));
+            doc.text('Authorized Signatory', 160, 140 + (rows.length * 10));
+            doc.line(160, 142 + (rows.length * 10), 190, 142 + (rows.length * 10));
+            
+            // Save the PDF
+            const client = document.getElementById('billClient').value;
+            const month = document.getElementById('month').value;
+            doc.save(`SGX_Transport_Bill_${client}_${month}.pdf`);
+        });
+
+        // Save transactions to localStorage
+        function saveTransactions() {
+            localStorage.setItem('sgx-transactions', JSON.stringify(transactions));
+        }
+
+        // Render all transactions in the table
+        function renderAllTransactions() {
+            allTransactionsTable.innerHTML = '';
+            
+            transactions.forEach(transaction => {
+                const row = allTransactionsTable.insertRow();
+                
+                row.innerHTML = `
+                    <td>${new Date(transaction.date).toLocaleDateString()}</td>
+                    <td>${transaction.client}</td>
+                    <td>${transaction.product}</td>
+                    <td>${transaction.grossWeight.toFixed(2)}</td>
+                    <td>${transaction.tareWeight.toFixed(2)}</td>
+                    <td>${transaction.netWeight.toFixed(2)}</td>
+                    <td>${transaction.transporter}</td>
+                    <td>${transaction.truckNumber}</td>
+                    <td>₹${transaction.price.toFixed(2)}</td>
+                    <td>₹${transaction.totalPrice.toFixed(2)}</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" onclick="deleteTransaction(${transaction.id})">Delete</button>
+                    </td>
+                `;
+            });
+        }
+
+        // Delete transaction
+        function deleteTransaction(id) {
+            if (confirm('Are you sure you want to delete this transaction?')) {
+                transactions = transactions.filter(transaction => transaction.id !== id);
+                saveTransactions();
+                renderAllTransactions();
+                
+                // Hide bill container if it's showing the deleted transaction
+                billContainer.style.display = 'none';
+            }
+        }
+
+        // Generate bill for a client for a specific month
+        function generateBill(client, month) {
+            const [year, monthNum] = month.split('-');
+            const clientTransactions = transactions.filter(transaction => {
+                const transactionDate = new Date(transaction.date);
+                return transaction.client === client && 
+                       transactionDate.getFullYear() == year && 
+                       (transactionDate.getMonth() + 1) == monthNum;
+            });
+            
+            if (clientTransactions.length === 0) {
+                alert('No transactions found for this client in the selected month.');
+                return;
+            }
+            
+            // Display bill container
+            billContainer.style.display = 'block';
+            
+            // Set bill details
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+                              "July", "August", "September", "October", "November", "December"];
+            
+            clientDetails.innerHTML = `
+                <strong>Client:</strong> ${client}<br>
+                <strong>Address:</strong> [Client Address]
+            `;
+            
+            billPeriod.innerHTML = `
+                <strong>Bill Period:</strong> ${monthNames[monthNum - 1]} ${year}<br>
+                <strong>Bill Date:</strong> ${new Date().toLocaleDateString()}
+            `;
+            
+            // Add transactions to bill
+            billTransactions.innerHTML = '';
+            let totalAmount = 0;
+            
+            clientTransactions.forEach(transaction => {
+                const row = billTransactions.insertRow();
+                row.innerHTML = `
+                    <td>${new Date(transaction.date).toLocaleDateString()}</td>
+                    <td>${transaction.product}</td>
+                    <td>${transaction.grossWeight.toFixed(2)}</td>
+                    <td>${transaction.tareWeight.toFixed(2)}</td>
+                    <td>${transaction.netWeight.toFixed(2)}</td>
+                    <td>₹${transaction.price.toFixed(2)}</td>
+                    <td>₹${transaction.totalPrice.toFixed(2)}</td>
+                `;
+                
+                totalAmount += transaction.totalPrice;
+            });
+            
+            // Update total amount
+            totalAmountElement.textContent = totalAmount.toFixed(2);
+        }
+
+        // Initialize the app
+        function init() {
+            renderAllTransactions();
+            
+            // Set default date to today
+            document.getElementById('date').valueAsDate = new Date();
+        }
+
+        // Make deleteTransaction available globally
+        window.deleteTransaction = deleteTransaction;
+
+        init();
     </script>
 </body>
 </html>
