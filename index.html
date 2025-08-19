@@ -40,16 +40,23 @@
             font-weight: bold;
         }
         @media print {
-            .no-print {
-                display: none !important;
+            body * {
+                visibility: hidden;
             }
-            body {
-                background-color: white;
+            .bill-container, .bill-container * {
+                visibility: visible;
             }
             .bill-container {
-                display: block !important;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 0;
+                padding: 20px;
                 box-shadow: none;
-                padding: 0;
+            }
+            .no-print {
+                display: none !important;
             }
             .table {
                 font-size: 12px;
@@ -119,11 +126,35 @@
                     </div>
                     <div class="mb-3">
                         <label for="transportName" class="form-label">Transport Name</label>
-                        <input type="text" class="form-control" id="transportName" required>
+                        <select class="form-select" id="transportName" required>
+                            <option value="">Select Transport Name</option>
+                            <option value="Sri Venkateswara Transports">Sri Venkateswara Transports</option>
+                            <option value="Sai Transports">Sai Transports</option>
+                            <option value="Ganesh Transports">Ganesh Transports</option>
+                            <option value="Lakshmi Transports">Lakshmi Transports</option>
+                            <option value="Balaji Transports">Balaji Transports</option>
+                            <option value="Shiva Transports">Shiva Transports</option>
+                            <option value="Ram Transports">Ram Transports</option>
+                            <option value="Krishna Transports">Krishna Transports</option>
+                            <option value="Hanuman Transports">Hanuman Transports</option>
+                            <option value="Surya Transports">Surya Transports</option>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="transporterName" class="form-label">Transporter Name</label>
-                        <input type="text" class="form-control" id="transporterName" required>
+                        <select class="form-select" id="transporterName" required>
+                            <option value="">Select Transporter Name</option>
+                            <option value="Raju">Raju</option>
+                            <option value="Mohan">Mohan</option>
+                            <option value="Suresh">Suresh</option>
+                            <option value="Ramesh">Ramesh</option>
+                            <option value="Shiva">Shiva</option>
+                            <option value="Venkat">Venkat</option>
+                            <option value="Nagesh">Nagesh</option>
+                            <option value="Chandra">Chandra</option>
+                            <option value="Arun">Arun</option>
+                            <option value="Prakash">Prakash</option>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="truckNumber" class="form-label">Truck Number</label>
@@ -174,12 +205,20 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="transportFilter" class="form-label">Filter by Transport Name (Optional)</label>
-                        <input type="text" class="form-control" id="transportFilter" placeholder="Enter transport name">
-                    </div>
-                    <div class="mb-3">
                         <label for="transporterFilter" class="form-label">Filter by Transporter Name (Optional)</label>
-                        <input type="text" class="form-control" id="transporterFilter" placeholder="Enter transporter name">
+                        <select class="form-select" id="transporterFilter">
+                            <option value="">All Transporters</option>
+                            <option value="Raju">Raju</option>
+                            <option value="Mohan">Mohan</option>
+                            <option value="Suresh">Suresh</option>
+                            <option value="Ramesh">Ramesh</option>
+                            <option value="Shiva">Shiva</option>
+                            <option value="Venkat">Venkat</option>
+                            <option value="Nagesh">Nagesh</option>
+                            <option value="Chandra">Chandra</option>
+                            <option value="Arun">Arun</option>
+                            <option value="Prakash">Prakash</option>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="month" class="form-label">Select Month</label>
@@ -401,10 +440,9 @@
             
             const client = document.getElementById('billClient').value;
             const month = document.getElementById('month').value;
-            const transportFilter = document.getElementById('transportFilter').value.trim();
             const transporterFilter = document.getElementById('transporterFilter').value.trim();
             
-            generateBill(client, month, transportFilter, transporterFilter);
+            generateBill(client, month, '', transporterFilter);
         });
 
         // Save bill button
@@ -416,7 +454,6 @@
             
             const client = document.getElementById('billClient').value;
             const month = document.getElementById('month').value;
-            const transportFilter = document.getElementById('transportFilter').value.trim();
             const transporterFilter = document.getElementById('transporterFilter').value.trim();
             
             // Get the transactions shown in the bill
@@ -443,7 +480,6 @@
                 id: Date.now(),
                 client,
                 month,
-                transportFilter: transportFilter || 'All',
                 transporterFilter: transporterFilter || 'All',
                 transactions: billTransactionsData,
                 totalAmount: parseFloat(totalAmountElement.textContent),
@@ -535,12 +571,8 @@
             // Save the PDF
             const client = document.getElementById('billClient').value;
             const month = document.getElementById('month').value;
-            const transportFilter = document.getElementById('transportFilter').value.trim();
             const transporterFilter = document.getElementById('transporterFilter').value.trim();
             let filename = `SGX_Transport_Bill_${client.split('–')[0].trim()}_${month}`;
-            if (transportFilter) {
-                filename += `_${transportFilter}`;
-            }
             if (transporterFilter) {
                 filename += `_${transporterFilter}`;
             }
@@ -606,17 +638,10 @@
                        (transactionDate.getMonth() + 1) == monthNum;
             });
             
-            // Apply transport filter if specified
-            if (transportFilter) {
-                clientTransactions = clientTransactions.filter(
-                    transaction => transaction.transportName.toLowerCase().includes(transportFilter.toLowerCase())
-                );
-            }
-            
             // Apply transporter filter if specified
             if (transporterFilter) {
                 clientTransactions = clientTransactions.filter(
-                    transaction => transaction.transporterName.toLowerCase().includes(transporterFilter.toLowerCase())
+                    transaction => transaction.transporterName === transporterFilter
                 );
             }
             
@@ -644,9 +669,6 @@
             
             // Add transport info if filtered
             let transportInfoHTML = '';
-            if (transportFilter) {
-                transportInfoHTML += `<strong>Transport Name:</strong> ${transportFilter}<br>`;
-            }
             if (transporterFilter) {
                 transportInfoHTML += `<strong>Transporter Name:</strong> ${transporterFilter}`;
             }
