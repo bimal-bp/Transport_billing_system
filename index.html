@@ -72,9 +72,25 @@
                         <label for="client" class="form-label">Client</label>
                         <select class="form-select" id="client" required>
                             <option value="">Select Client</option>
-                            <option value="L&T">L&T</option>
-                            <option value="Madhuwada">Madhuwada</option>
-                            <option value="Airport">Airport</option>
+                            <option value="L & T P1 – Rambali">L & T P1 – Rambali</option>
+                            <option value="L & T P2 – Rambali">L & T P2 – Rambali</option>
+                            <option value="KEC – Rambali">KEC – Rambali</option>
+                            <option value="JS Mining – Rambali">JS Mining – Rambali</option>
+                            <option value="ITD – Rambali">ITD – Rambali</option>
+                            <option value="Sowaparnika – Rambali">Sowaparnika – Rambali</option>
+                            <option value="L & T Jio – Sindhiya">L & T Jio – Sindhiya</option>
+                            <option value="Afcyan – Shela Nagar">Afcyan – Shela Nagar</option>
+                            <option value="Bharath Verma – Airport">Bharath Verma – Airport</option>
+                            <option value="Aparna RMC – Gajuwaka">Aparna RMC – Gajuwaka</option>
+                            <option value="ACC RMC – Gajuwaka">ACC RMC – Gajuwaka</option>
+                            <option value="Prisam RMC – Gajuwaka">Prisam RMC – Gajuwaka</option>
+                            <option value="Nuvoco RMC – Gajuwaka">Nuvoco RMC – Gajuwaka</option>
+                            <option value="Ultratech – Mindi">Ultratech – Mindi</option>
+                            <option value="MK Builders – Madhurwada">MK Builders – Madhurwada</option>
+                            <option value="North Star Homes – Madhurwada">North Star Homes – Madhurwada</option>
+                            <option value="Coastal RMC – Madhurwada">Coastal RMC – Madhurwada</option>
+                            <option value="Coastal RMC – Achututapuram">Coastal RMC – Achututapuram</option>
+                            <option value="Vizag Port – Vizag Port">Vizag Port – Vizag Port</option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -102,8 +118,12 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="transporter" class="form-label">Transporter Name</label>
-                        <input type="text" class="form-control" id="transporter" required>
+                        <label for="transportName" class="form-label">Transport Name</label>
+                        <input type="text" class="form-control" id="transportName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="transporterName" class="form-label">Transporter Name</label>
+                        <input type="text" class="form-control" id="transporterName" required>
                     </div>
                     <div class="mb-3">
                         <label for="truckNumber" class="form-label">Truck Number</label>
@@ -132,10 +152,34 @@
                         <label for="billClient" class="form-label">Select Client</label>
                         <select class="form-select" id="billClient" required>
                             <option value="">Select Client</option>
-                            <option value="L&T">L&T</option>
-                            <option value="Madhuwada">Madhuwada</option>
-                            <option value="Airport">Airport</option>
+                            <option value="L & T P1 – Rambali">L & T P1 – Rambali</option>
+                            <option value="L & T P2 – Rambali">L & T P2 – Rambali</option>
+                            <option value="KEC – Rambali">KEC – Rambali</option>
+                            <option value="JS Mining – Rambali">JS Mining – Rambali</option>
+                            <option value="ITD – Rambali">ITD – Rambali</option>
+                            <option value="Sowaparnika – Rambali">Sowaparnika – Rambali</option>
+                            <option value="L & T Jio – Sindhiya">L & T Jio – Sindhiya</option>
+                            <option value="Afcyan – Shela Nagar">Afcyan – Shela Nagar</option>
+                            <option value="Bharath Verma – Airport">Bharath Verma – Airport</option>
+                            <option value="Aparna RMC – Gajuwaka">Aparna RMC – Gajuwaka</option>
+                            <option value="ACC RMC – Gajuwaka">ACC RMC – Gajuwaka</option>
+                            <option value="Prisam RMC – Gajuwaka">Prisam RMC – Gajuwaka</option>
+                            <option value="Nuvoco RMC – Gajuwaka">Nuvoco RMC – Gajuwaka</option>
+                            <option value="Ultratech – Mindi">Ultratech – Mindi</option>
+                            <option value="MK Builders – Madhurwada">MK Builders – Madhurwada</option>
+                            <option value="North Star Homes – Madhurwada">North Star Homes – Madhurwada</option>
+                            <option value="Coastal RMC – Madhurwada">Coastal RMC – Madhurwada</option>
+                            <option value="Coastal RMC – Achututapuram">Coastal RMC – Achututapuram</option>
+                            <option value="Vizag Port – Vizag Port">Vizag Port – Vizag Port</option>
                         </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="transportFilter" class="form-label">Filter by Transport Name (Optional)</label>
+                        <input type="text" class="form-control" id="transportFilter" placeholder="Enter transport name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="transporterFilter" class="form-label">Filter by Transporter Name (Optional)</label>
+                        <input type="text" class="form-control" id="transporterFilter" placeholder="Enter transporter name">
                     </div>
                     <div class="mb-3">
                         <label for="month" class="form-label">Select Month</label>
@@ -153,6 +197,7 @@
                     <div id="billDetails" class="mb-4">
                         <div id="clientDetails"></div>
                         <div id="billPeriod"></div>
+                        <div id="transportInfo"></div>
                     </div>
                     <table class="table table-bordered">
                         <thead class="table-dark">
@@ -164,6 +209,9 @@
                                 <th>Net Wt.</th>
                                 <th>Price/Ton</th>
                                 <th>Amount</th>
+                                <th>Transport</th>
+                                <th>Transporter</th>
+                                <th>Truck No.</th>
                             </tr>
                         </thead>
                         <tbody id="billTransactions">
@@ -171,7 +219,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th colspan="6" class="text-end">Total Amount:</th>
+                                <th colspan="9" class="text-end">Total Amount:</th>
                                 <th id="totalAmount">0.00</th>
                             </tr>
                         </tfoot>
@@ -202,6 +250,7 @@
                                 <th>Gross Wt.</th>
                                 <th>Tare Wt.</th>
                                 <th>Net Wt.</th>
+                                <th>Transport</th>
                                 <th>Transporter</th>
                                 <th>Truck No.</th>
                                 <th>Price/Ton</th>
@@ -224,6 +273,19 @@
         let transactions = JSON.parse(localStorage.getItem('sgx-transactions')) || [];
         let bills = JSON.parse(localStorage.getItem('sgx-bills')) || [];
 
+        // Price per ton based on location
+        const locationPrices = {
+            'Rambali': 260,
+            'Gajuwaka': 170,
+            'Madhurwada': 260,
+            'Sindhiya': 260,
+            'Shela Nagar': 260,
+            'Airport': 260,
+            'Mindi': 260,
+            'Achututapuram': 260,
+            'Vizag Port': 260
+        };
+
         // DOM elements
         const transactionForm = document.getElementById('transactionForm');
         const billForm = document.getElementById('billForm');
@@ -236,16 +298,33 @@
         const saveBillBtn = document.getElementById('saveBillBtn');
         const clientDetails = document.getElementById('clientDetails');
         const billPeriod = document.getElementById('billPeriod');
+        const transportInfo = document.getElementById('transportInfo');
         const grossWeightInput = document.getElementById('grossWeight');
         const tareWeightInput = document.getElementById('tareWeight');
         const netWeightInput = document.getElementById('netWeight');
         const priceInput = document.getElementById('price');
         const totalPriceInput = document.getElementById('totalPrice');
+        const clientSelect = document.getElementById('client');
+        const transportNameInput = document.getElementById('transportName');
+        const transporterNameInput = document.getElementById('transporterName');
+        const truckNumberInput = document.getElementById('truckNumber');
 
         // Calculate net weight and total price automatically
         grossWeightInput.addEventListener('input', calculateWeights);
         tareWeightInput.addEventListener('input', calculateWeights);
         priceInput.addEventListener('input', calculateTotalPrice);
+
+        // Set price based on selected client location
+        clientSelect.addEventListener('change', function() {
+            const selectedClient = this.value;
+            if (selectedClient) {
+                const location = selectedClient.split('–')[1].trim();
+                if (locationPrices[location]) {
+                    priceInput.value = locationPrices[location];
+                    calculateTotalPrice();
+                }
+            }
+        });
 
         function calculateWeights() {
             const grossWeight = parseFloat(grossWeightInput.value) || 0;
@@ -292,8 +371,9 @@
                 grossWeight: grossWeight,
                 tareWeight: tareWeight,
                 netWeight: parseFloat(netWeightInput.value),
-                transporter: document.getElementById('transporter').value,
-                truckNumber: document.getElementById('truckNumber').value,
+                transportName: transportNameInput.value,
+                transporterName: transporterNameInput.value,
+                truckNumber: truckNumberInput.value,
                 date: document.getElementById('date').value,
                 price: parseFloat(priceInput.value),
                 totalPrice: parseFloat(totalPriceInput.value)
@@ -304,6 +384,14 @@
             renderAllTransactions();
             transactionForm.reset();
             
+            // Reset price if it was auto-set
+            if (clientSelect.value) {
+                const location = clientSelect.value.split('–')[1].trim();
+                if (locationPrices[location]) {
+                    priceInput.value = locationPrices[location];
+                }
+            }
+            
             alert('Transaction saved successfully!');
         });
 
@@ -313,8 +401,10 @@
             
             const client = document.getElementById('billClient').value;
             const month = document.getElementById('month').value;
+            const transportFilter = document.getElementById('transportFilter').value.trim();
+            const transporterFilter = document.getElementById('transporterFilter').value.trim();
             
-            generateBill(client, month);
+            generateBill(client, month, transportFilter, transporterFilter);
         });
 
         // Save bill button
@@ -326,6 +416,8 @@
             
             const client = document.getElementById('billClient').value;
             const month = document.getElementById('month').value;
+            const transportFilter = document.getElementById('transportFilter').value.trim();
+            const transporterFilter = document.getElementById('transporterFilter').value.trim();
             
             // Get the transactions shown in the bill
             const billTransactionsData = [];
@@ -340,7 +432,10 @@
                     tareWeight: parseFloat(cells[3].textContent),
                     netWeight: parseFloat(cells[4].textContent),
                     price: parseFloat(cells[5].textContent.replace('₹', '')),
-                    amount: parseFloat(cells[6].textContent.replace('₹', ''))
+                    amount: parseFloat(cells[6].textContent.replace('₹', '')),
+                    transportName: cells[7].textContent,
+                    transporterName: cells[8].textContent,
+                    truckNumber: cells[9].textContent
                 });
             }
             
@@ -348,6 +443,8 @@
                 id: Date.now(),
                 client,
                 month,
+                transportFilter: transportFilter || 'All',
+                transporterFilter: transporterFilter || 'All',
                 transactions: billTransactionsData,
                 totalAmount: parseFloat(totalAmountElement.textContent),
                 createdAt: new Date().toISOString()
@@ -366,14 +463,14 @@
         // Download as PDF button
         downloadBillBtn.addEventListener('click', function() {
             const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
+            const doc = new jsPDF('landscape');
             
             // Add company header
             doc.setFontSize(16);
             doc.setTextColor(40);
-            doc.text('SGX Minerals Pvt Ltd', 105, 15, { align: 'center' });
+            doc.text('SGX Minerals Pvt Ltd', doc.internal.pageSize.width / 2, 15, { align: 'center' });
             doc.setFontSize(14);
-            doc.text('Transport Bill', 105, 22, { align: 'center' });
+            doc.text('Transport Bill', doc.internal.pageSize.width / 2, 22, { align: 'center' });
             
             // Add client details
             doc.setFontSize(12);
@@ -392,14 +489,24 @@
                 }
             });
             
+            // Add transport info if filtered
+            const transportInfoText = transportInfo.innerHTML.split('<br>');
+            if (transportInfoText[0].trim() !== '') {
+                transportInfoText.forEach((line, index) => {
+                    if (line.trim() !== '') {
+                        doc.text(line.replace(/<[^>]*>/g, ''), 20, 80 + (index * 7));
+                    }
+                });
+            }
+            
             // Add table headers
-            doc.setFontSize(12);
+            doc.setFontSize(10);
             doc.setFont(undefined, 'bold');
-            const headers = ["Date", "Product", "Gross Wt.", "Tare Wt.", "Net Wt.", "Price", "Amount"];
+            const headers = ["Date", "Product", "Gross", "Tare", "Net", "Price", "Amount", "Transport", "Transporter", "Truck No"];
             let x = 15;
-            const columnWidths = [20, 30, 20, 20, 20, 20, 30];
+            const columnWidths = [20, 20, 15, 15, 15, 15, 20, 25, 25, 25];
             headers.forEach((header, index) => {
-                doc.text(header, x, 80);
+                doc.text(header, x, 100);
                 x += columnWidths[index];
             });
             
@@ -410,25 +517,34 @@
                 const cells = rows[i].getElementsByTagName('td');
                 x = 15;
                 for (let j = 0; j < cells.length; j++) {
-                    doc.text(cells[j].textContent, x, 90 + (i * 10));
+                    doc.text(cells[j].textContent, x, 110 + (i * 10));
                     x += columnWidths[j];
                 }
             }
             
             // Add total
             doc.setFont(undefined, 'bold');
-            doc.text(`Total Amount: ₹${totalAmountElement.textContent}`, 140, 90 + (rows.length * 10));
+            doc.text(`Total Amount: ₹${totalAmountElement.textContent}`, doc.internal.pageSize.width - 20, 110 + (rows.length * 10), { align: 'right' });
             
             // Add footer
             doc.setFontSize(10);
-            doc.text('For SGX Minerals Pvt Ltd', 20, 120 + (rows.length * 10));
-            doc.text('Authorized Signatory', 160, 140 + (rows.length * 10));
-            doc.line(160, 142 + (rows.length * 10), 190, 142 + (rows.length * 10));
+            doc.text('For SGX Minerals Pvt Ltd', 20, 130 + (rows.length * 10));
+            doc.text('Authorized Signatory', doc.internal.pageSize.width - 20, 150 + (rows.length * 10), { align: 'right' });
+            doc.line(doc.internal.pageSize.width - 50, 152 + (rows.length * 10), doc.internal.pageSize.width - 20, 152 + (rows.length * 10));
             
             // Save the PDF
             const client = document.getElementById('billClient').value;
             const month = document.getElementById('month').value;
-            doc.save(`SGX_Transport_Bill_${client}_${month}.pdf`);
+            const transportFilter = document.getElementById('transportFilter').value.trim();
+            const transporterFilter = document.getElementById('transporterFilter').value.trim();
+            let filename = `SGX_Transport_Bill_${client.split('–')[0].trim()}_${month}`;
+            if (transportFilter) {
+                filename += `_${transportFilter}`;
+            }
+            if (transporterFilter) {
+                filename += `_${transporterFilter}`;
+            }
+            doc.save(`${filename}.pdf`);
         });
 
         // Save transactions to localStorage
@@ -444,13 +560,14 @@
                 const row = allTransactionsTable.insertRow();
                 
                 row.innerHTML = `
-                    <td>${new Date(transaction.date).toLocaleDateString()}</td>
+                    <td>${formatDate(transaction.date)}</td>
                     <td>${transaction.client}</td>
                     <td>${transaction.product}</td>
                     <td>${transaction.grossWeight.toFixed(2)}</td>
                     <td>${transaction.tareWeight.toFixed(2)}</td>
                     <td>${transaction.netWeight.toFixed(2)}</td>
-                    <td>${transaction.transporter}</td>
+                    <td>${transaction.transportName}</td>
+                    <td>${transaction.transporterName}</td>
                     <td>${transaction.truckNumber}</td>
                     <td>₹${transaction.price.toFixed(2)}</td>
                     <td>₹${transaction.totalPrice.toFixed(2)}</td>
@@ -459,6 +576,12 @@
                     </td>
                 `;
             });
+        }
+
+        // Format date for display
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-IN');
         }
 
         // Delete transaction
@@ -474,14 +597,28 @@
         }
 
         // Generate bill for a client for a specific month
-        function generateBill(client, month) {
+        function generateBill(client, month, transportFilter = '', transporterFilter = '') {
             const [year, monthNum] = month.split('-');
-            const clientTransactions = transactions.filter(transaction => {
+            let clientTransactions = transactions.filter(transaction => {
                 const transactionDate = new Date(transaction.date);
                 return transaction.client === client && 
                        transactionDate.getFullYear() == year && 
                        (transactionDate.getMonth() + 1) == monthNum;
             });
+            
+            // Apply transport filter if specified
+            if (transportFilter) {
+                clientTransactions = clientTransactions.filter(
+                    transaction => transaction.transportName.toLowerCase().includes(transportFilter.toLowerCase())
+                );
+            }
+            
+            // Apply transporter filter if specified
+            if (transporterFilter) {
+                clientTransactions = clientTransactions.filter(
+                    transaction => transaction.transporterName.toLowerCase().includes(transporterFilter.toLowerCase())
+                );
+            }
             
             if (clientTransactions.length === 0) {
                 alert('No transactions found for this client in the selected month.');
@@ -496,14 +633,24 @@
                               "July", "August", "September", "October", "November", "December"];
             
             clientDetails.innerHTML = `
-                <strong>Client:</strong> ${client}<br>
-                <strong>Address:</strong> [Client Address]
+                <strong>Client:</strong> ${client.split('–')[0].trim()}<br>
+                <strong>Location:</strong> ${client.split('–')[1].trim()}
             `;
             
             billPeriod.innerHTML = `
-                <strong>Bill Period:</strong> ${monthNames[monthNum - 1]} ${year}<br>
+                <strong>Bill Period:</strong> ${monthNames[parseInt(monthNum) - 1]} ${year}<br>
                 <strong>Bill Date:</strong> ${new Date().toLocaleDateString()}
             `;
+            
+            // Add transport info if filtered
+            let transportInfoHTML = '';
+            if (transportFilter) {
+                transportInfoHTML += `<strong>Transport Name:</strong> ${transportFilter}<br>`;
+            }
+            if (transporterFilter) {
+                transportInfoHTML += `<strong>Transporter Name:</strong> ${transporterFilter}`;
+            }
+            transportInfo.innerHTML = transportInfoHTML;
             
             // Add transactions to bill
             billTransactions.innerHTML = '';
@@ -512,13 +659,16 @@
             clientTransactions.forEach(transaction => {
                 const row = billTransactions.insertRow();
                 row.innerHTML = `
-                    <td>${new Date(transaction.date).toLocaleDateString()}</td>
+                    <td>${formatDate(transaction.date)}</td>
                     <td>${transaction.product}</td>
                     <td>${transaction.grossWeight.toFixed(2)}</td>
                     <td>${transaction.tareWeight.toFixed(2)}</td>
                     <td>${transaction.netWeight.toFixed(2)}</td>
                     <td>₹${transaction.price.toFixed(2)}</td>
                     <td>₹${transaction.totalPrice.toFixed(2)}</td>
+                    <td>${transaction.transportName}</td>
+                    <td>${transaction.transporterName}</td>
+                    <td>${transaction.truckNumber}</td>
                 `;
                 
                 totalAmount += transaction.totalPrice;
