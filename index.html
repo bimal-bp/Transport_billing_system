@@ -39,6 +39,21 @@
         #netWeight, #totalPrice {
             font-weight: bold;
         }
+        .custom-dropdown {
+            position: relative;
+        }
+        .add-new-option {
+            color: #0d6efd;
+            cursor: pointer;
+            padding: 8px 12px;
+        }
+        .add-new-option:hover {
+            background-color: #f8f9fa;
+        }
+        .dropdown-input-container {
+            padding: 8px 12px;
+            display: none;
+        }
         @media print {
             body * {
                 visibility: hidden;
@@ -75,7 +90,7 @@
             <div class="col-md-6">
                 <h3>Add New Transaction</h3>
                 <form id="transactionForm">
-                    <div class="mb-3">
+                    <div class="mb-3 custom-dropdown">
                         <label for="client" class="form-label">Client</label>
                         <select class="form-select" id="client" required>
                             <option value="">Select Client</option>
@@ -101,8 +116,16 @@
                             <option value="Coastal RMC – Achututapuram">Coastal RMC – Achututapuram</option>
                             <option value="Vizag Port – Vizag Port">Vizag Port – Vizag Port</option>
                         </select>
+                        <div class="add-new-option" onclick="showAddOptionInput('client')">+ Add New Client</div>
+                        <div class="dropdown-input-container" id="clientInputContainer">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="newClientInput" placeholder="New client name">
+                                <button class="btn btn-outline-secondary" type="button" onclick="addNewOption('client')">Add</button>
+                            </div>
+                            <small class="text-muted">Format: Name – Location</small>
+                        </div>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 custom-dropdown">
                         <label for="product" class="form-label">Product</label>
                         <select class="form-select" id="product" required>
                             <option value="">Select Product</option>
@@ -114,6 +137,13 @@
                             <option value="GSB">GSB</option>
                             <option value="P/Sand">P/Sand</option>
                         </select>
+                        <div class="add-new-option" onclick="showAddOptionInput('product')">+ Add New Product</div>
+                        <div class="dropdown-input-container" id="productInputContainer">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="newProductInput" placeholder="New product name">
+                                <button class="btn btn-outline-secondary" type="button" onclick="addNewOption('product')">Add</button>
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-4 mb-3">
@@ -129,7 +159,7 @@
                             <input type="number" step="0.01" class="form-control" id="netWeight" readonly>
                         </div>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 custom-dropdown">
                         <label for="transportName" class="form-label">Transport Name</label>
                         <select class="form-select" id="transportName" required>
                             <option value="">Select Transport Name</option>
@@ -144,8 +174,15 @@
                             <option value="Hanuman Transports">Hanuman Transports</option>
                             <option value="Surya Transports">Surya Transports</option>
                         </select>
+                        <div class="add-new-option" onclick="showAddOptionInput('transportName')">+ Add New Transport</div>
+                        <div class="dropdown-input-container" id="transportNameInputContainer">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="newTransportNameInput" placeholder="New transport name">
+                                <button class="btn btn-outline-secondary" type="button" onclick="addNewOption('transportName')">Add</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 custom-dropdown">
                         <label for="transporterName" class="form-label">Transporter Name</label>
                         <select class="form-select" id="transporterName" required>
                             <option value="">Select Transporter Name</option>
@@ -160,6 +197,13 @@
                             <option value="Arun">Arun</option>
                             <option value="Prakash">Prakash</option>
                         </select>
+                        <div class="add-new-option" onclick="showAddOptionInput('transporterName')">+ Add New Transporter</div>
+                        <div class="dropdown-input-container" id="transporterNameInputContainer">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="newTransporterNameInput" placeholder="New transporter name">
+                                <button class="btn btn-outline-secondary" type="button" onclick="addNewOption('transporterName')">Add</button>
+                            </div>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="truckNumber" class="form-label">Truck Number</label>
@@ -325,6 +369,12 @@
         // Database setup using localStorage
         let transactions = JSON.parse(localStorage.getItem('sgx-transactions')) || [];
         let bills = JSON.parse(localStorage.getItem('sgx-bills')) || [];
+        let customOptions = JSON.parse(localStorage.getItem('sgx-custom-options')) || {
+            client: [],
+            product: [],
+            transportName: [],
+            transporterName: []
+        };
 
         // Price per ton based on location
         const locationPrices = {
@@ -418,6 +468,72 @@
             const price = parseFloat(priceInput.value) || 0;
             const totalPrice = netWeight * price;
             totalPriceInput.value = totalPrice.toFixed(2);
+        }
+
+        // Show input field to add new option
+        function showAddOptionInput(fieldType) {
+            // Hide all input containers first
+            document.querySelectorAll('.dropdown-input-container').forEach(container => {
+                container.style.display = 'none';
+            });
+            
+            // Show the selected input container
+            document.getElementById(`${fieldType}InputContainer`).style.display = 'block';
+        }
+
+        // Add new option to dropdown
+        function addNewOption(fieldType) {
+            const inputField = document.getElementById(`new${fieldType.charAt(0).toUpperCase() + fieldType.slice(1)}Input`);
+            const newValue = inputField.value.trim();
+            
+            if (!newValue) {
+                alert('Please enter a value');
+                return;
+            }
+            
+            // Add to custom options
+            if (!customOptions[fieldType].includes(newValue)) {
+                customOptions[fieldType].push(newValue);
+                localStorage.setItem('sgx-custom-options', JSON.stringify(customOptions));
+            }
+            
+            // Add to dropdown
+            const selectElement = document.getElementById(fieldType);
+            const option = document.createElement('option');
+            option.value = newValue;
+            option.textContent = newValue;
+            selectElement.appendChild(option);
+            
+            // Select the new option
+            selectElement.value = newValue;
+            
+            // Hide input container and clear input
+            document.getElementById(`${fieldType}InputContainer`).style.display = 'none';
+            inputField.value = '';
+            
+            // If it's a client field, try to set price based on location
+            if (fieldType === 'client') {
+                const location = newValue.split('–')[1];
+                if (location && locationPrices[location.trim()]) {
+                    priceInput.value = locationPrices[location.trim()];
+                    calculateTotalPrice();
+                }
+            }
+        }
+
+        // Load custom options into dropdowns
+        function loadCustomOptions() {
+            for (const fieldType in customOptions) {
+                const selectElement = document.getElementById(fieldType);
+                customOptions[fieldType].forEach(value => {
+                    if (!selectElement.querySelector(`option[value="${value}"]`)) {
+                        const option = document.createElement('option');
+                        option.value = value;
+                        option.textContent = value;
+                        selectElement.appendChild(option);
+                    }
+                });
+            }
         }
 
         // Form submit - Add new transaction
@@ -745,14 +861,17 @@
 
         // Initialize the app
         function init() {
+            loadCustomOptions();
             renderAllTransactions();
             
             // Set default date to today
             document.getElementById('date').valueAsDate = new Date();
         }
 
-        // Make deleteTransaction available globally
+        // Make functions available globally
         window.deleteTransaction = deleteTransaction;
+        window.showAddOptionInput = showAddOptionInput;
+        window.addNewOption = addNewOption;
 
         init();
     </script>
