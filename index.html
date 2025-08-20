@@ -112,7 +112,7 @@
                             <option value="Rivo sand">Rivo sand</option>
                             <option value="Scolpin">Scolpin</option>
                             <option value="GSB">GSB</option>
-                            <option value="Rivo sand">P/Sand</option>
+                            <option value="P/Sand">P/Sand</option>
                         </select>
                     </div>
                     <div class="row">
@@ -157,7 +157,7 @@
                             <option value="Venkat">Venkat</option>
                             <option value="Nagesh">Nagesh</option>
                             <option value="Chandra">Chandra</option>
-                            <option value="Arun">Ajay</option>
+                            <option value="Arun">Arun</option>
                             <option value="Prakash">Prakash</option>
                         </select>
                     </div>
@@ -185,8 +185,15 @@
                 <h3>Generate Monthly Bill</h3>
                 <form id="billForm">
                     <div class="mb-3">
+                        <label for="billType" class="form-label">Bill Type</label>
+                        <select class="form-select" id="billType" required>
+                            <option value="client">Client Bill</option>
+                            <option value="transporter">Transporter Bill</option>
+                        </select>
+                    </div>
+                    <div class="mb-3" id="clientBillSection">
                         <label for="billClient" class="form-label">Select Client</label>
-                        <select class="form-select" id="billClient" required>
+                        <select class="form-select" id="billClient">
                             <option value="">Select Client</option>
                             <option value="L & T P1 – Rambali">L & T P1 – Rambali</option>
                             <option value="L & T P2 – Rambali">L & T P2 – Rambali</option>
@@ -211,10 +218,10 @@
                             <option value="Vizag Port – Vizag Port">Vizag Port – Vizag Port</option>
                         </select>
                     </div>
-                    <div class="mb-3">
-                        <label for="transporterFilter" class="form-label">Filter by Transporter Name (Optional)</label>
-                        <select class="form-select" id="transporterFilter">
-                            <option value="">All Transporters</option>
+                    <div class="mb-3" id="transporterBillSection" style="display: none;">
+                        <label for="billTransporter" class="form-label">Select Transporter</label>
+                        <select class="form-select" id="billTransporter">
+                            <option value="">Select Transporter</option>
                             <option value="Raju">Raju</option>
                             <option value="Mohan">Mohan</option>
                             <option value="Suresh">Suresh</option>
@@ -249,6 +256,7 @@
                         <thead class="table-dark">
                             <tr>
                                 <th>Date</th>
+                                <th>Client</th>
                                 <th>Product</th>
                                 <th>Gross Wt.</th>
                                 <th>Tare Wt.</th>
@@ -256,7 +264,6 @@
                                 <th>Price/Ton</th>
                                 <th>Amount</th>
                                 <th>Transport</th>
-                                <th>Transporter</th>
                                 <th>Truck No.</th>
                             </tr>
                         </thead>
@@ -265,8 +272,8 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th colspan="9" class="text-end">Total Amount:</th>
-                                <th id="totalAmount">0.00</th>
+                                <th colspan="7" class="text-end">Total Amount:</th>
+                                <th colspan="3" id="totalAmount">0.00</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -352,9 +359,24 @@
         const priceInput = document.getElementById('price');
         const totalPriceInput = document.getElementById('totalPrice');
         const clientSelect = document.getElementById('client');
-        const transportNameInput = document.getElementById('transportName');
-        const transporterNameInput = document.getElementById('transporterName');
-        const truckNumberInput = document.getElementById('truckNumber');
+        const billTypeSelect = document.getElementById('billType');
+        const clientBillSection = document.getElementById('clientBillSection');
+        const transporterBillSection = document.getElementById('transporterBillSection');
+
+        // Toggle between client and transporter bill sections
+        billTypeSelect.addEventListener('change', function() {
+            if (this.value === 'client') {
+                clientBillSection.style.display = 'block';
+                transporterBillSection.style.display = 'none';
+                document.getElementById('billTransporter').required = false;
+                document.getElementById('billClient').required = true;
+            } else {
+                clientBillSection.style.display = 'none';
+                transporterBillSection.style.display = 'block';
+                document.getElementById('billClient').required = false;
+                document.getElementById('billTransporter').required = true;
+            }
+        });
 
         // Calculate net weight and total price automatically
         grossWeightInput.addEventListener('input', calculateWeights);
@@ -418,9 +440,9 @@
                 grossWeight: grossWeight,
                 tareWeight: tareWeight,
                 netWeight: parseFloat(netWeightInput.value),
-                transportName: transportNameInput.value,
-                transporterName: transporterNameInput.value,
-                truckNumber: truckNumberInput.value,
+                transportName: document.getElementById('transportName').value,
+                transporterName: document.getElementById('transporterName').value,
+                truckNumber: document.getElementById('truckNumber').value,
                 date: document.getElementById('date').value,
                 price: parseFloat(priceInput.value),
                 totalPrice: parseFloat(totalPriceInput.value)
@@ -446,11 +468,24 @@
         billForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const client = document.getElementById('billClient').value;
+            const billType = document.getElementById('billType').value;
             const month = document.getElementById('month').value;
-            const transporterFilter = document.getElementById('transporterFilter').value.trim();
             
-            generateBill(client, month, '', transporterFilter);
+            if (billType === 'client') {
+                const client = document.getElementById('billClient').value;
+                if (!client) {
+                    alert('Please select a client');
+                    return;
+                }
+                generateBill('client', client, month);
+            } else {
+                const transporter = document.getElementById('billTransporter').value;
+                if (!transporter) {
+                    alert('Please select a transporter');
+                    return;
+                }
+                generateBill('transporter', transporter, month);
+            }
         });
 
         // Save bill button
@@ -460,9 +495,11 @@
                 return;
             }
             
-            const client = document.getElementById('billClient').value;
+            const billType = document.getElementById('billType').value;
             const month = document.getElementById('month').value;
-            const transporterFilter = document.getElementById('transporterFilter').value.trim();
+            const billFor = billType === 'client' 
+                ? document.getElementById('billClient').value 
+                : document.getElementById('billTransporter').value;
             
             // Get the transactions shown in the bill
             const billTransactionsData = [];
@@ -472,23 +509,23 @@
                 const cells = rows[i].getElementsByTagName('td');
                 billTransactionsData.push({
                     date: cells[0].textContent,
-                    product: cells[1].textContent,
-                    grossWeight: parseFloat(cells[2].textContent),
-                    tareWeight: parseFloat(cells[3].textContent),
-                    netWeight: parseFloat(cells[4].textContent),
-                    price: parseFloat(cells[5].textContent.replace('₹', '')),
-                    amount: parseFloat(cells[6].textContent.replace('₹', '')),
-                    transportName: cells[7].textContent,
-                    transporterName: cells[8].textContent,
+                    client: cells[1].textContent,
+                    product: cells[2].textContent,
+                    grossWeight: parseFloat(cells[3].textContent),
+                    tareWeight: parseFloat(cells[4].textContent),
+                    netWeight: parseFloat(cells[5].textContent),
+                    price: parseFloat(cells[6].textContent.replace('₹', '')),
+                    amount: parseFloat(cells[7].textContent.replace('₹', '')),
+                    transportName: cells[8].textContent,
                     truckNumber: cells[9].textContent
                 });
             }
             
             const bill = {
                 id: Date.now(),
-                client,
+                billType,
+                billFor,
                 month,
-                transporterFilter: transporterFilter || 'All',
                 transactions: billTransactionsData,
                 totalAmount: parseFloat(totalAmountElement.textContent),
                 createdAt: new Date().toISOString()
@@ -516,7 +553,7 @@
             doc.setFontSize(14);
             doc.text('Transport Bill', doc.internal.pageSize.width / 2, 22, { align: 'center' });
             
-            // Add client details
+            // Add bill details
             doc.setFontSize(12);
             const clientDetailsText = clientDetails.innerHTML.split('<br>');
             clientDetailsText.forEach((line, index) => {
@@ -546,9 +583,9 @@
             // Add table headers
             doc.setFontSize(10);
             doc.setFont(undefined, 'bold');
-            const headers = ["Date", "Product", "Gross", "Tare", "Net", "Price", "Amount", "Transport", "Transporter", "Truck No"];
+            const headers = ["Date", "Client", "Product", "Gross", "Tare", "Net", "Price", "Amount", "Transport", "Truck No"];
             let x = 15;
-            const columnWidths = [20, 20, 15, 15, 15, 15, 20, 25, 25, 25];
+            const columnWidths = [20, 30, 20, 15, 15, 15, 15, 20, 25, 25];
             headers.forEach((header, index) => {
                 doc.text(header, x, 100);
                 x += columnWidths[index];
@@ -577,13 +614,19 @@
             doc.line(doc.internal.pageSize.width - 50, 152 + (rows.length * 10), doc.internal.pageSize.width - 20, 152 + (rows.length * 10));
             
             // Save the PDF
-            const client = document.getElementById('billClient').value;
+            const billType = document.getElementById('billType').value;
+            const billFor = billType === 'client' 
+                ? document.getElementById('billClient').value 
+                : document.getElementById('billTransporter').value;
             const month = document.getElementById('month').value;
-            const transporterFilter = document.getElementById('transporterFilter').value.trim();
-            let filename = `SGX_Transport_Bill_${client.split('–')[0].trim()}_${month}`;
-            if (transporterFilter) {
-                filename += `_${transporterFilter}`;
+            
+            let filename = '';
+            if (billType === 'client') {
+                filename = `SGX_Client_Bill_${billFor.split('–')[0].trim()}_${month}`;
+            } else {
+                filename = `SGX_Transporter_Bill_${billFor}_${month}`;
             }
+            
             doc.save(`${filename}.pdf`);
         });
 
@@ -636,25 +679,18 @@
             }
         }
 
-        // Generate bill for a client for a specific month
-        function generateBill(client, month, transportFilter = '', transporterFilter = '') {
+        // Generate bill for a client or transporter for a specific month
+        function generateBill(billType, billFor, month) {
             const [year, monthNum] = month.split('-');
-            let clientTransactions = transactions.filter(transaction => {
+            let filteredTransactions = transactions.filter(transaction => {
                 const transactionDate = new Date(transaction.date);
-                return transaction.client === client && 
+                return (billType === 'client' ? transaction.client === billFor : transaction.transporterName === billFor) &&
                        transactionDate.getFullYear() == year && 
                        (transactionDate.getMonth() + 1) == monthNum;
             });
             
-            // Apply transporter filter if specified
-            if (transporterFilter) {
-                clientTransactions = clientTransactions.filter(
-                    transaction => transaction.transporterName === transporterFilter
-                );
-            }
-            
-            if (clientTransactions.length === 0) {
-                alert('No transactions found for this client in the selected month.');
+            if (filteredTransactions.length === 0) {
+                alert(`No transactions found for ${billType === 'client' ? 'this client' : 'this transporter'} in the selected month.`);
                 return;
             }
             
@@ -665,31 +701,31 @@
             const monthNames = ["January", "February", "March", "April", "May", "June",
                               "July", "August", "September", "October", "November", "December"];
             
-            clientDetails.innerHTML = `
-                <strong>Client:</strong> ${client.split('–')[0].trim()}<br>
-                <strong>Location:</strong> ${client.split('–')[1].trim()}
-            `;
+            if (billType === 'client') {
+                clientDetails.innerHTML = `
+                    <strong>Client:</strong> ${billFor.split('–')[0].trim()}<br>
+                    <strong>Location:</strong> ${billFor.split('–')[1].trim()}
+                `;
+            } else {
+                clientDetails.innerHTML = `
+                    <strong>Transporter:</strong> ${billFor}
+                `;
+            }
             
             billPeriod.innerHTML = `
                 <strong>Bill Period:</strong> ${monthNames[parseInt(monthNum) - 1]} ${year}<br>
                 <strong>Bill Date:</strong> ${new Date().toLocaleDateString()}
             `;
             
-            // Add transport info if filtered
-            let transportInfoHTML = '';
-            if (transporterFilter) {
-                transportInfoHTML += `<strong>Transporter Name:</strong> ${transporterFilter}`;
-            }
-            transportInfo.innerHTML = transportInfoHTML;
-            
             // Add transactions to bill
             billTransactions.innerHTML = '';
             let totalAmount = 0;
             
-            clientTransactions.forEach(transaction => {
+            filteredTransactions.forEach(transaction => {
                 const row = billTransactions.insertRow();
                 row.innerHTML = `
                     <td>${formatDate(transaction.date)}</td>
+                    <td>${transaction.client}</td>
                     <td>${transaction.product}</td>
                     <td>${transaction.grossWeight.toFixed(2)}</td>
                     <td>${transaction.tareWeight.toFixed(2)}</td>
@@ -697,7 +733,6 @@
                     <td>₹${transaction.price.toFixed(2)}</td>
                     <td>₹${transaction.totalPrice.toFixed(2)}</td>
                     <td>${transaction.transportName}</td>
-                    <td>${transaction.transporterName}</td>
                     <td>${transaction.truckNumber}</td>
                 `;
                 
