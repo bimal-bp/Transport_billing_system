@@ -77,15 +77,206 @@
                 font-size: 12px;
             }
         }
+        
+        /* Vehicle Lookup Styles */
+        .vehicle-lookup-section {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        .search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+        .form-group {
+            flex: 1;
+            min-width: 300px;
+        }
+        .results-section {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: none;
+            margin-bottom: 30px;
+        }
+        .results-header {
+            background-color: #1e88e5;
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .results-content {
+            padding: 25px;
+        }
+        .result-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .result-title {
+            font-weight: 600;
+            color: #1e88e5;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+        .no-results {
+            text-align: center;
+            padding: 30px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        .add-vendor-section {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+            display: none;
+        }
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .form-field {
+            flex: 1;
+            min-width: 250px;
+        }
+        .vehicle-numbers-container {
+            margin-top: 15px;
+        }
+        .vehicle-number-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        .remove-vehicle {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .add-vehicle {
+            background-color: #9e9e9e;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        @media (max-width: 768px) {
+            .form-group, .form-field {
+                min-width: 100%;
+            }
+            .form-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header text-center">
-            <h1>Transport Billing System</h1>
-            <p class="lead">SGX Minerals Pvt Ltd</p>
+            <h1>SGX Minerals Transport Billing System</h1>
+            <p class="lead">Complete Transport Management Solution</p>
         </div>
 
+        <!-- Vehicle Information Lookup Section -->
+        <div class="vehicle-lookup-section">
+            <h3>Vehicle Information Lookup</h3>
+            <div class="search-form">
+                <div class="form-group">
+                    <label for="vehicleSelect">Select Vehicle Number:</label>
+                    <select class="form-select" id="vehicleSelect">
+                        <option value="">-- Select a vehicle number --</option>
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                </div>
+            </div>
+            
+            <button type="button" class="btn btn-primary mt-3" onclick="searchVehicle()">Search Vehicle</button>
+            <button type="button" class="btn btn-success mt-3 ms-2" onclick="toggleAddVendorForm()">Add New Vendor</button>
+        </div>
+        
+        <section class="results-section" id="resultsSection">
+            <div class="results-header">Vehicle Details</div>
+            <div class="results-content" id="resultsContent">
+                <!-- Results will be displayed here -->
+            </div>
+        </section>
+        
+        <section class="add-vendor-section" id="addVendorSection">
+            <div class="results-header">Add New Vendor</div>
+            <div class="results-content">
+                <form id="vendorForm">
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="partyName">Party Name:</label>
+                            <input type="text" class="form-control" id="partyName" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="accountNo">Account Number:</label>
+                            <input type="text" class="form-control" id="accountNo" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="bankName">Bank Name & Branch:</label>
+                            <input type="text" class="form-control" id="bankName" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="beneficiary">Beneficiary:</label>
+                            <input type="text" class="form-control" id="beneficiary" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="pan">PAN Number:</label>
+                            <input type="text" class="form-control" id="pan" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label>Vehicle Numbers:</label>
+                            <div class="vehicle-numbers-container" id="vehicleNumbersContainer">
+                                <div class="vehicle-number-input">
+                                    <input type="text" class="form-control vehicleNumber" placeholder="Vehicle Number" required>
+                                    <button type="button" class="btn btn-danger remove-vehicle" onclick="removeVehicleField(this)">Remove</button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-secondary add-vehicle" onclick="addVehicleField()">Add Another Vehicle</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <button type="button" class="btn btn-primary" onclick="addNewVendor()">Save Vendor</button>
+                        <button type="button" class="btn btn-secondary ms-2" onclick="toggleAddVendorForm()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Transport Billing Section -->
         <div class="row">
             <div class="col-md-6">
                 <h3>Add New Transaction</h3>
@@ -375,6 +566,242 @@
             transportName: [],
             transporterName: []
         };
+
+        // Vehicle data
+        let vehicleData = [
+            {
+                partyName: "YARA GOVIND RAO",
+                accountNo: "29611100003742",
+                bankName: "DCB Bank, Anakapalli",
+                beneficiary: "YARA GOVIND RAO",
+                pan: "AYBPY0969R",
+                vehicleNumbers: ["AP39UY3435", "AP39UY3345"]
+            },
+            {
+                partyName: "GADASALA SHIVA",
+                accountNo: "1420155000065560",
+                bankName: "KVB",
+                beneficiary: "Gadasala Shiva",
+                pan: "BTSPG7175G",
+                vehicleNumbers: ["AP39WC2389", "AP39UQ2489"]
+            },
+            {
+                partyName: "Sri Modamamba Transport",
+                accountNo: "6086101003133",
+                bankName: "CANARA BANK",
+                beneficiary: "Ommi Madhu babu",
+                pan: "ABEYO1294K",
+                vehicleNumbers: ["AP39UZ3335"]
+            },
+            {
+                partyName: "Sri Vijayalaxmi Transport",
+                accountNo: "868457131",
+                bankName: "Indian Bank,Anakapalle",
+                beneficiary: "S K Santosh Kumar",
+                pan: "CWUPS1379C",
+                vehicleNumbers: ["AP39W4518"]
+            },
+            {
+                partyName: "Sri Polnati Venkata Srinivas Rao",
+                accountNo: "11040675260",
+                bankName: "SBI, Anakapalle",
+                beneficiary: "Polnati Venkata Srinivasrao",
+                pan: "EMOPP4189M",
+                vehicleNumbers: ["AP39UH2489"]
+            },
+            {
+                partyName: "SRI MODHAMAMBA TRANSPORT",
+                accountNo: "6546322059",
+                bankName: "Indian Bank Anakapalle",
+                beneficiary: "MONDEPU GOPI",
+                pan: "GDAPM7595D",
+                vehicleNumbers: []
+            },
+            {
+                partyName: "SRI VARDHAN TRANSPORT",
+                accountNo: "6086101005682",
+                bankName: "CB Anakapalle",
+                beneficiary: "PRIYANKA NAGULAPALLI",
+                pan: "CCOPN9093G",
+                vehicleNumbers: ["AP39W3579"]
+            },
+            {
+                partyName: "SHREE NOOKAMBICA LORRY TRANSPORT",
+                accountNo: "30893220505",
+                bankName: "SBI, Anakapalle",
+                beneficiary: "P.N.K.A Ananda Rao",
+                pan: "CHOPP3166M",
+                vehicleNumbers: ["AP39UF3245"]
+            },
+            {
+                partyName: "LAKSHMI SRINIVASA TRANSPORT",
+                accountNo: "053501505619",
+                bankName: "ICICI, Anakapalle",
+                beneficiary: "Gali Venkata Nukaraju",
+                pan: "BQDPG9659K",
+                vehicleNumbers: ["AP39W0505", "AP39WC7499"]
+            },
+            {
+                partyName: "SRI MODAMAMBA LORRY TRANSPORT -POLNATI RAMU",
+                accountNo: "039301000039226",
+                bankName: "Indian Overseas Bank-Anakapalli",
+                beneficiary: "POLNATI RAMU",
+                pan: "AMEPP6405E",
+                vehicleNumbers: ["AP39TV2536"]
+            },
+            {
+                partyName: "POLNATI LAKSHMANA",
+                accountNo: "20393866584",
+                bankName: "SBI, Anakapalle",
+                beneficiary: "POLNATI LAKSHMANA",
+                pan: "EHGPP6721J",
+                vehicleNumbers: ["AP39TV2537"]
+            },
+            {
+                partyName: "GADASALA VENKATA RAO",
+                accountNo: "41897007408",
+                bankName: "SBI, Anakapalle",
+                beneficiary: "GADASALA VENKATA RAO",
+                pan: "BNLPG8819G",
+                vehicleNumbers: []
+            },
+            {
+                partyName: "Sri Durga Devi Lorry Services",
+                accountNo: "30758927213",
+                bankName: "SBI, Anakapalle",
+                beneficiary: "N.Narisinga Rao",
+                pan: "APCPN4125N",
+                vehicleNumbers: []
+            },
+            {
+                partyName: "Sri Balaji Transport",
+                accountNo: "20286779205",
+                bankName: "SBI",
+                beneficiary: "Gangiredla Srinivasa Rao",
+                pan: "BZJPG9951K",
+                vehicleNumbers: ["AP39UE5163", "AP39VB2727", "AP39UP4799"]
+            },
+            {
+                partyName: "BINDHU SREE TRANSPORT AND CONSTRUCTIONS",
+                accountNo: "053505500548",
+                bankName: "ICICI, Anakapalle",
+                beneficiary: "NAMMI SUNITHA",
+                pan: "BMHPB1489C",
+                vehicleNumbers: []
+            },
+            {
+                partyName: "Sri Venkata Durga Lorry service",
+                accountNo: "50100398807876",
+                bankName: "HDFC, Anakapalle",
+                beneficiary: "Ullingala Nageswar Rao",
+                pan: "CKQPN5200B",
+                vehicleNumbers: ["AP39TN2579", "AP39UJ2669"]
+            },
+            {
+                partyName: "Mummina Srinu",
+                accountNo: "31897791454",
+                bankName: "SBI",
+                beneficiary: "Mummina Srinu",
+                pan: "NIEPS1843A",
+                vehicleNumbers: []
+            },
+            {
+                partyName: "LANKA NAGESWARA RAO",
+                accountNo: "386602010025075",
+                bankName: "UNION BANK",
+                beneficiary: "Lanka Nageswara Rao",
+                pan: "AYWPL8780A",
+                vehicleNumbers: ["AP39UU5665"]
+            },
+            {
+                partyName: "R.K TRANSPORT",
+                accountNo: "18862612000462",
+                bankName: "PUNJAB NATIONAL BANK",
+                beneficiary: "Ommi Venkata Rao",
+                pan: "CACPV1217L",
+                vehicleNumbers: ["AP39UG0559"]
+            },
+            {
+                partyName: "SRI SIVA DURGA LORRY SERVICE",
+                accountNo: "44005352428",
+                bankName: "SBI, ANAKAPALLI",
+                beneficiary: "Kommuri Durga Prasad",
+                pan: "CKBPK7332L",
+                vehicleNumbers: ["AP39WD8349"]
+            },
+            {
+                partyName: "SRI MANIKANTA BALaji LORRY TRANSPORT",
+                accountNo: "33982901231",
+                bankName: "SBI, Anakapalle",
+                beneficiary: "M SOMUNAIDU",
+                pan: "CLXPM8882N",
+                vehicleNumbers: ["AP39WD4199"]
+            },
+            {
+                partyName: "Sri Kanaka Durga LorrySERVICE",
+                accountNo: "50100482507472",
+                bankName: "HDFC, Anakapalle",
+                beneficiary: "CH.POLANDRA",
+                pan: "FRQPP2042K",
+                vehicleNumbers: ["AP39UJ2399"]
+            },
+            {
+                partyName: "K DURGA RAO",
+                accountNo: "184010100508162",
+                bankName: "AXIS BANK OF INDIA ANAKAPALLE",
+                beneficiary: "K.DURGA RAO",
+                pan: "BCBPR6347H",
+                vehicleNumbers: ["AP31TN4302"]
+            },
+            {
+                partyName: "SRI BALA DURGA LORRY SERVICE",
+                accountNo: "36055252391",
+                bankName: "SBI, Anakapalle",
+                beneficiary: "J.SRI PADHAVALLAABHA",
+                pan: "CCEPJ2049G",
+                vehicleNumbers: ["AP39VF2339"]
+            },
+            {
+                partyName: "SRI MODA VENKATA SURYA LORRY SERVICE",
+                accountNo: "33808097568",
+                bankName: "ANAKAPALLE",
+                beneficiary: "POLNATI TATA RAO",
+                pan: "BYEPP6263R",
+                vehicleNumbers: ["AP39UC6939"]
+            },
+            {
+                partyName: "Hanuman Lorry Service",
+                accountNo: "42325671649",
+                bankName: "Anakapalli",
+                beneficiary: "T.Venkata Suresh",
+                pan: "QSPPS5777F",
+                vehicleNumbers: []
+            },
+            {
+                partyName: "POLNATI ANNAPURNA",
+                accountNo: "6086101003959",
+                bankName: "CANARA BANK",
+                beneficiary: "Polnati Annapuran",
+                pan: "DWOPP2749J",
+                vehicleNumbers: ["AP39WC9149", "AP39UP9239"]
+            },
+            {
+                partyName: "SRI VIJAYA DURGA ENTERPRISES",
+                accountNo: "31499967751",
+                bankName: "SBI ANAKAPALLE",
+                beneficiary: "VASADI RAMESH",
+                pan: "AGNPV7563J",
+                vehicleNumbers: []
+            },
+            {
+                partyName: "VYSHNAVI LORRY TRANSPORT",
+                accountNo: "053501507032",
+                bankName: "ICICI, Anakapalle",
+                beneficiary: "KARANAM A SRINIVASARAO",
+                pan: "PJFPS1223C",
+                vehicleNumbers: []
+            }
+        ];
 
         // Price per ton based on location
         const locationPrices = {
@@ -859,10 +1286,173 @@
             totalAmountElement.textContent = totalAmount.toFixed(2);
         }
 
+        // Vehicle Lookup Functions
+        // Populate the dropdown with vehicle numbers
+        function populateVehicleDropdown() {
+            const vehicleSelect = document.getElementById('vehicleSelect');
+            // Clear existing options except the first one
+            while (vehicleSelect.options.length > 1) {
+                vehicleSelect.remove(1);
+            }
+            
+            const allVehicleNumbers = [];
+            
+            vehicleData.forEach(vehicle => {
+                vehicle.vehicleNumbers.forEach(number => {
+                    if (number && !allVehicleNumbers.includes(number)) {
+                        allVehicleNumbers.push(number);
+                        const option = document.createElement('option');
+                        option.value = number;
+                        option.textContent = number;
+                        vehicleSelect.appendChild(option);
+                    }
+                });
+            });
+        }
+
+        // Search function
+        function searchVehicle() {
+            const selectValue = document.getElementById('vehicleSelect').value;
+            
+            if (!selectValue) {
+                alert('Please select a vehicle number');
+                return;
+            }
+            
+            const results = vehicleData.filter(vehicle => 
+                vehicle.vehicleNumbers.includes(selectValue)
+            );
+            
+            displayResults(results, selectValue);
+        }
+
+        // Display results
+        function displayResults(results, searchValue) {
+            const resultsSection = document.getElementById('resultsSection');
+            const resultsContent = document.getElementById('resultsContent');
+            
+            resultsContent.innerHTML = '';
+            
+            if (results.length === 0) {
+                resultsContent.innerHTML = '<div class="no-results">No details found for vehicle number: ' + searchValue + '</div>';
+            } else {
+                results.forEach(vehicle => {
+                    const resultDiv = document.createElement('div');
+                    resultDiv.className = 'result-item';
+                    
+                    resultDiv.innerHTML = `
+                        <div class="result-title">Party Name: ${vehicle.partyName}</div>
+                        <div><strong>Bank Account No.:</strong> ${vehicle.accountNo}</div>
+                        <div><strong>Bank Name & Branch:</strong> ${vehicle.bankName}</div>
+                        <div><strong>Beneficiary:</strong> ${vehicle.beneficiary}</div>
+                        <div><strong>PAN:</strong> ${vehicle.pan}</div>
+                        <div><strong>Vehicle Numbers:</strong> ${vehicle.vehicleNumbers.join(', ')}</div>
+                    `;
+                    
+                    resultsContent.appendChild(resultDiv);
+                });
+            }
+            
+            resultsSection.style.display = 'block';
+            
+            // Scroll to results
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Toggle add vendor form
+        function toggleAddVendorForm() {
+            const addVendorSection = document.getElementById('addVendorSection');
+            const resultsSection = document.getElementById('resultsSection');
+            
+            if (addVendorSection.style.display === 'block') {
+                addVendorSection.style.display = 'none';
+                document.getElementById('vendorForm').reset();
+                // Reset to single vehicle field
+                const container = document.getElementById('vehicleNumbersContainer');
+                while (container.children.length > 1) {
+                    container.removeChild(container.lastChild);
+                }
+            } else {
+                addVendorSection.style.display = 'block';
+                resultsSection.style.display = 'none';
+                addVendorSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Add vehicle field
+        function addVehicleField() {
+            const container = document.getElementById('vehicleNumbersContainer');
+            const newField = document.createElement('div');
+            newField.className = 'vehicle-number-input';
+            newField.innerHTML = `
+                <input type="text" class="form-control vehicleNumber" placeholder="Vehicle Number">
+                <button type="button" class="btn btn-danger remove-vehicle" onclick="removeVehicleField(this)">Remove</button>
+            `;
+            container.appendChild(newField);
+        }
+
+        // Remove vehicle field
+        function removeVehicleField(button) {
+            const container = document.getElementById('vehicleNumbersContainer');
+            if (container.children.length > 1) {
+                container.removeChild(button.parentNode);
+            }
+        }
+
+        // Add new vendor
+        function addNewVendor() {
+            const partyName = document.getElementById('partyName').value.trim();
+            const accountNo = document.getElementById('accountNo').value.trim();
+            const bankName = document.getElementById('bankName').value.trim();
+            const beneficiary = document.getElementById('beneficiary').value.trim();
+            const pan = document.getElementById('pan').value.trim();
+            
+            // Get all vehicle numbers
+            const vehicleInputs = document.querySelectorAll('.vehicleNumber');
+            const vehicleNumbers = [];
+            
+            vehicleInputs.forEach(input => {
+                const value = input.value.trim().toUpperCase();
+                if (value) {
+                    vehicleNumbers.push(value);
+                }
+            });
+            
+            // Validate required fields
+            if (!partyName || !accountNo || !bankName || !beneficiary || !pan || vehicleNumbers.length === 0) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Create new vendor object
+            const newVendor = {
+                partyName,
+                accountNo,
+                bankName,
+                beneficiary,
+                pan,
+                vehicleNumbers
+            };
+            
+            // Add to data array
+            vehicleData.push(newVendor);
+            
+            // Update dropdown
+            populateVehicleDropdown();
+            
+            // Show success message
+            alert('Vendor added successfully!');
+            
+            // Reset form and hide it
+            document.getElementById('vendorForm').reset();
+            toggleAddVendorForm();
+        }
+
         // Initialize the app
         function init() {
             loadCustomOptions();
             renderAllTransactions();
+            populateVehicleDropdown();
             
             // Set default date to today
             document.getElementById('date').valueAsDate = new Date();
@@ -872,6 +1462,11 @@
         window.deleteTransaction = deleteTransaction;
         window.showAddOptionInput = showAddOptionInput;
         window.addNewOption = addNewOption;
+        window.searchVehicle = searchVehicle;
+        window.toggleAddVendorForm = toggleAddVendorForm;
+        window.addVehicleField = addVehicleField;
+        window.removeVehicleField = removeVehicleField;
+        window.addNewVendor = addNewVendor;
 
         init();
     </script>
